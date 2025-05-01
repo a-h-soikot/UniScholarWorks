@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> UniScholarWorks </title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+</head>
+
+<body>
+
+    <div class="sidebar-and-paper">
+
+        <div class="div-sidebar">
+
+            <form method="get" autocomplete="off">
+
+                <ul class="filter-lists">
+
+                    <li class="list-header"> Select Type </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Reasearch Paper
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Thesis
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Dissertation
+                        </label>
+                    </li>
+
+                    <li class="list-header"> Select Date </li>
+
+                    <li class="list-item">
+                        <label>
+                            Start Date: &nbsp 
+                            <input type="date">
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            &nbsp End Date: &nbsp 
+                            <input type="date">
+                        </label>
+                    </li>
+
+                    <li class="list-header"> Select Tag </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Machine Learning
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            CyberSecurity
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Data Science
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Math
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Chemistry
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Medicine
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Education
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Technology
+                        </label>
+                    </li>
+
+                    <li class="list-item">
+                        <label>
+                            <input type="checkbox">
+                            Psychology
+                        </label>
+                    </li>
+
+                </ul>
+
+                <ul style="margin-top: 25px;">
+
+                    <li class="list-header"> About </li>
+
+                    <li class="list-item" style="text-align: justify;">
+                        UniScholarWorks is a free and open digital library for Research Papers, Thesis, and Dissertation works done by students.
+                        UniScholarWorks aim to enhance accessibility to students' work and collaboration among student, to motivate students to Research works.
+                    </li>
+
+                </ul>
+
+            </form>
+
+        </div>
+
+        <div class="div-papers">
+            <table> 
+                <tr><td>
+                    <div class="paper-container">
+                        <h4 class="paper-title"> 	
+                            Automatic Habitat Mapping using Machine Learning
+                        </h4>
+
+                        <div class="autors-and-date">
+                            <span class="authors"> 
+                                Author 1, Author 2
+                            </span>
+                            <span class="date"> 
+                                &nbsp — 5 May 2025
+                            </span>
+                        </div>
+
+                        <div class="paper-summary">
+                            <div class="summary-text">
+                                This paper presents a novel approach to habitat mapping using machine learning techniques. 
+                                The proposed method leverages satellite imagery and advanced algorithms to accurately classify 
+                                different habitat types, providing valuable insights for conservation efforts.
+                            </div>
+                        </div>
+
+                        <div class="tags">
+
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Machine Learning </a>
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Natural sciences </a>
+
+                        </div>
+
+                    </div>
+                </td></tr>
+
+            <!-- <div class="paper-container-separator"></div> -->
+
+                <tr><td>
+                    <div class="paper-container">
+                        <h4 class="paper-title"> 	
+                            Developing dynamic machine learning surrogate models of physics-based industrial process simulation models
+                        </h4>
+
+                        <div class="autors-and-date">
+                            <span class="authors"> 
+                                Author 1, Author 2
+                            </span>
+                            <span class="date"> 
+                                &nbsp — 4 May 2025
+                            </span>
+                        </div>
+
+                        <div class="paper-summary">
+                            <div class="summary-text">
+                                Dynamic physics-based models of industrial processes can be computationally heavy which prevents using them in some applications, e.g. in process operator training. Suitability of machine learning in creating surrogate models of a physics-based unit operation models was studied in this research. The main motivation for this was to find out if machine learning model can be accurate enough to replace the corresponding physics-based components in dynamic modelling and simulation software Apros® which is developed by VTT Technical Research Centre of Finland Ltd and Fortum.
+                            </div>
+                        </div>
+
+                        <div class="tags">
+
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Chaotic Systems </a>
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Recurrent neural networks </a>
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Fractional Dynamical Systems </a>
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Anomalous Diffusion </a>
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Delayed Discrete Fractional Systems </a>
+
+                        </div>
+
+                    </div>
+                </td></tr>
+            
+            <!--<div class="paper-container-separator"></div> -->
+
+                <tr><td>
+                    <div class="paper-container">
+                        <h4 class="paper-title"> 	
+                                
+                            Experiments towards mitigation of motional heating in trapped ion quantum information processing
+
+                        </h4>
+
+                        <div class="autors-and-date">
+                            <span class="authors"> 
+                                Author 1, Author 2
+                            </span>
+                            <span class="date"> 
+                                &nbsp — 29 April 2025
+                            </span>
+                        </div>
+
+                        <div class="paper-summary">
+                            <div class="summary-text">
+                                <span style="font-style: italic;"> No description available. </span>
+                            </div>
+                        </div>
+
+                        <div class="tags">
+
+                            
+
+                        </div>
+
+                    </div>
+                </td> </tr>
+
+                <tr><td>
+                    <div class="paper-container">
+                        <h4 class="paper-title"> 	
+                            MMPI-2 Patterns of Adults with Attention-Deficit Hyperactivity Disorder
+                        </h4>
+
+                        <div class="autors-and-date">
+                            <span class="authors"> 
+                                Author 1, Author 2
+                            </span>
+                            <span class="date"> 
+                                &nbsp — 23 March 2025
+                            </span>
+                        </div>
+
+                        <div class="paper-summary">
+                            <div class="summary-text">
+                                Recent literature suggests that not only does Attention-deficit Hyperactivity Disorder (ADHD/ADD) persist into adulthood, 
+                                but it can also be accompanied by personality characteristics which cause emotional difficulties. In fact, 
+                                adults diagnosed with ADHD can present with a profusion of difficulties. Several constructs appear to accumulate dynamically
+                                throughout development to place the adult with ADHD at risk for multiple emotional problems.
+                            </div>
+                        </div>
+
+                        <div class="tags">
+
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i>  Attention-deficit Hyperactivity Disorder </a>
+                            <a class="tag" href="#"> <i class="fas fa-tag"></i> Psychology </a>
+
+                        </div>
+
+                    </div>
+                </td></tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

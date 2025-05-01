@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Login </title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}">
+
+</head>
+
+<body>
+
+    <div class="form-container">
+
+        <h2> Login to <span> UniScholarWorks </span> </h2>
+
+        <div class="underline"> </div>
+
+        <form method="post">
+
+            <div class="form-group">
+
+                <label for="userid">
+                    <i class="fas fa-user" style="margin-right: 8px;"></i>User ID
+                </label>
+
+                <input type="text" id="userid" name="userid" placeholder="Enter your id or email" required="">
+            
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+                    <i class="fas fa-lock" style="margin-right: 8px;"></i>Password
+                </label>
+
+                <input type="password" id="password" name="password" placeholder="Enter your password" required="">
+            
+            </div>
+
+            <button type="submit" class="login-button">
+                <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>Login
+            </button>
+
+        </form>
+
+        <label class="bottom-label">
+            Don't have an account?
+            <a href="#"> Register here </a>
+        </label>
+
+    </div>
+    
+</body>
+
+</html>
