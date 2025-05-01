@@ -26,17 +26,91 @@
 
         <div class="paper-container">
 
-            <div class="left-section">
-                hello
+            <div class="div-left-section">
 
+                <img class="img-paper-view" src="{{ url_for('static', filename='images/thumbnail.jpeg') }}" alt="Paper Icon" />
 
-
+                <a href="#" class="download-btn" download>
+                    <i class="fas fa-file-pdf"></i> Download PDF
+                </a>
 
             </div>
 
-            <div class="right-section">
+            <div class="div-right-section">
                 
-                <label class="meta-label"> Author </label>
+                <div class="div-paper-metas">
+                    
+                    <label class="meta-label"> Author </label>
+                    
+                    <div class="div-meta-data">
+                        <a href="#"> Author 1 </a>
+                        <a href="#"> , Author 2 </a>
+                    </div>
+
+                </div>
+
+                <div class="div-paper-metas">
+                    
+                    <label class="meta-label"> Type </label>
+                    <div class="div-meta-data">
+                        
+                        <a href="#"> Thesis </a>
+                        
+                    </div>
+
+                </div>
+
+                <div class="div-paper-metas">
+                    
+                    <label class="meta-label"> Date </label>
+                    
+                    <div class="div-meta-data">
+
+                        <a href="#"> 5 May 2025 </a>
+                        
+                    </div>
+
+                </div>
+
+                <div class="div-paper-metas">
+                    
+                    <label class="meta-label"> Tag / Subject </label>
+                    
+                    <div class="div-meta-data">
+
+                        <a href="#"> Machine Learning </a>
+                        <a href="#"> , Natural Science </a>
+                        
+                    </div>
+
+                </div>
+
+                <div class="div-paper-metas">
+                    
+                    <label class="meta-label"> Description </label>
+                    
+                    <div class="div-paper-description">
+
+                        Abstract. Dynamic physics-based models of industrial processes can be computationally heavy which prevents using them in some applications, 
+                        e.g. in process operator training. Suitability of machine learning in creating surrogate models of a physics-based unit operation models was
+                        studied in this research. The main motivation for this was to find out if machine learning model can be accurate enough to replace the 
+                        corresponding physics-based components in dynamic modelling and simulation software Apros® which is developed by VTT Technical Research Centre
+                        of Finland Ltd and Fortum. This study is part of COCOP project, which receive funding from EU, and INTENS project that is Business Finland funded.
+                        The research work was divided into a literature study and an experimental part. In the literature study, the steps of modelling with data-driven 
+                        methods were studied and artificial neural network architectures suitable for dynamic modelling were investigated. Based on that, four neural 
+                        architectures were chosen for the case studies. In the first case study, linear and nonlinear autoregressive models with exogenous inputs 
+                        (ARX and NARX respectively) were used in modelling dynamic behaviour of a water tank process build in Apros®. In the second case study, also Long 
+                        Short-Term Memory (LSTM) and Gated Recurrent Unit (GRU) were considered and compared with the previously mentioned ARX and NARX models. The workflow
+                        from selecting the input and output variables for the machine learning model and generating the datasets in Apros® to implement the machine learning 
+                        models back to Apros® was defined. Keras is an open source neural network library running on Python that was utilised in the model generation framework 
+                        which was developed as a part of this study. Keras library is a very popular library that allow fast experimenting. The framework make use of random 
+                        hyperparameter search and each model is tested on a validation dataset in dynamic manner, i.e. in multi-step-ahead configuration, during the optimisation.
+                        
+                        
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
