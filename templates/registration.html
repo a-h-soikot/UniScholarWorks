@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Login </title>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/registration.css')}}">
+
+</head>
+
+<body>
+
+    <div class="form-container">
+
+        <h2> Register to <span> UniScholarWorks </span> </h2>
+    
+        <div class="underline"> </div>
+    
+        <form method="post">
+    
+            <div class="form-group">
+                <label for="name">
+                    <i class="fas fa-user" style="margin-right: 8px;"></i>Name
+                </label>
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope" style="margin-right: 8px;"></i>Email
+                </label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="password">
+                    <i class="fas fa-lock" style="margin-right: 8px;"></i>Password
+                </label>
+                <input type="password" id="password" name="password" placeholder="Enter a password" required>
+            </div>
+    
+            <div class="form-group">
+                <label for="confirm_password">
+                    <i class="fas fa-lock" style="margin-right: 8px;"></i>Confirm Password
+                </label>
+                <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+            </div>
+    
+            <button type="submit" class="registration-button">
+                <i class="fas fa-user-plus" style="margin-right: 8px;"></i>Register
+            </button>
+    
+        </form>
+    
+        <label class="bottom-label">
+            Already have an account?
+            <a href="#"> Login here </a>
+        </label>
+    
+    </div>
+    
+</body>
+
+</html>

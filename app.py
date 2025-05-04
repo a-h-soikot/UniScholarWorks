@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def func():
-    return render_template("paper.html")
+    return render_template("registration.html")
 
 if __name__ == "__main__":
     app.debug = True
