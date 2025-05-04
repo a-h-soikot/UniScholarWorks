@@ -4,8 +4,20 @@ from livereload import Server
 app = Flask(__name__)
 
 @app.route("/")
-def func():
+def home():
+    return render_template("home.html")
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/register")
+def register():
     return render_template("registration.html")
+
+@app.route("/paper")
+def paper():
+    return render_template("paper.html")
 
 if __name__ == "__main__":
     app.debug = True
