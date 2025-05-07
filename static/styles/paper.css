@@ -1,4 +1,12 @@
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 1170px;
+}
+
 .container {
     display: flex;
     flex-direction: column;

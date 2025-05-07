@@ -18,7 +18,7 @@
 
     <div class="form-container">
 
-        <h2> Login to <span> UniScholarWorks </span> </h2>
+        <h2> Login to <a href="{{ url_for('home') }}"> <span> UniScholarWorks </span> </a> </h2>
 
         <div class="underline"> </div>
 
@@ -52,7 +52,7 @@
 
         <label class="bottom-label">
             Don't have an account?
-            <a href="#"> Register here </a>
+            <a href="{{ url_for('register') }}" style="color: blue;"> Register here </a>
         </label>
 
     </div>

@@ -1,4 +1,12 @@
 
+.page-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 1170px;
+}
+
 .sidebar-and-paper {
     display: flex;
     flex-direction: row;
@@ -7,7 +15,7 @@
 
 .div-sidebar {
     width: 262px;
-    padding: 15px;
+    padding: 25px 15px 15px 0px;
 }
 
 ul {
@@ -44,14 +52,8 @@ ul {
 }
 
 .div-papers {
-    /*display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    
-    margin-top: 20px; */
     max-width: 870px;
-    padding: 15px;
+    padding: 25px 0px 15px 15px;
 }
 
 

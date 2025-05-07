@@ -1,0 +1,130 @@
+.header {
+    padding: 4px 10px 4px 0px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding-left: 5px;
+    background-color: rgb(68, 110, 155);
+    border-color: rgb(52, 85, 120);
+    border-style: solid;
+    border-width: 1px;
+    border-top-width: 1px;
+    font-size: 14px;
+    height: 55px;
+    width: 100%;
+    color: white;
+    background-image: linear-gradient(rgb(109, 148, 191), rgb(68, 110, 155) 50%, rgb(62, 100, 141));
+    background-repeat: no-repeat;
+    line-height: 20px;
+
+    margin-bottom: 10px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+.left-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.left-section .title {
+    color: rgb(221, 221, 221);
+    font-size: 19px;
+    margin-left: 5px;
+}
+
+.left-section .submission {
+    color: rgb(237, 237, 237);
+    font-size: 16px;
+    margin-left: 15px;
+}
+
+.right-section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.right-section .search-bar {
+    border-color: rgb(204, 204, 204);
+    border-style: solid;
+    outline: none;
+    border-width: 1px;
+    padding: 7px 10px;
+    font-size: 16px;
+    max-width: 400px;
+    width: 100%;
+
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+}
+
+.right-section .search-bar:focus {
+    box-shadow: 0px 1px 1px rgb(201, 201, 201);
+}
+
+.right-section .search-button {
+    background: linear-gradient(to bottom, #4a79bd, #3264a1);
+    border: none;
+    padding: 6px 12px;
+    margin-right: 20px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    cursor: pointer;
+
+    position: relative;
+}
+  
+.right-section .search-button i {
+    color: white;
+    font-size: 21px;
+}
+
+.search-button .tooltip {
+
+    position: absolute;
+    z-index: 150;
+    background-color: rgb(68, 110, 155);
+    color: white;
+    padding: 3px 5px;
+    border-radius: 4px;
+    font-size: 15px;
+    
+    bottom: -28px;
+    visibility: hidden;
+
+    cursor: default;
+    pointer-events: none;
+    white-space: nowrap;
+
+    opacity: 0;
+    transition: opacity 0.1s ease-in, background-color 0.3s, color 0.3s;
+}
+
+.search-button:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+
+    transition-delay: 0.7s;
+}
+
+
+.right-section .login-button {
+    background-color: rgb(109, 148, 191);
+    color: white;
+    border: none;
+    
+    height: 35px;
+    width: 100px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+}
