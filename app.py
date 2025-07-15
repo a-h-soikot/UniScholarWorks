@@ -15,9 +15,9 @@ def login():
 def register():
     return render_template("registration.html")
 
-@app.route("/paper")
-def paper():
-    return render_template("paper.html")
+@app.route("/report")
+def report():
+    return render_template("report.html")
 
 @app.route("/report_review")
 def report_review():
