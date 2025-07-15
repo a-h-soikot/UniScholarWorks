@@ -7,7 +7,7 @@
     max-width: 1170px;
 }
 
-.sidebar-and-paper {
+.sidebar-and-report {
     display: flex;
     flex-direction: row;
 }
@@ -49,17 +49,17 @@ ul {
     line-height: 20px;
 }
 
-.div-papers {
+.div-reports {
     max-width: 870px;
     padding: 25px 0px 15px 15px;
 }
 
 
-.paper-container {
+.report-container {
     max-width: 830px;
 }
 
-.paper-title {
+.report-title {
     color: rgb(51, 153, 243);
     cursor: pointer;
     font-size: 18px;
@@ -75,7 +75,7 @@ ul {
     font-size: 14px;
 }
 
-.paper-summary {
+.report-summary {
     border: 1px solid #cac9c9;
     border-radius: 5px;
     padding: 5px;
@@ -86,7 +86,7 @@ ul {
     border-top-width: 1.7px;
 }
 
-.paper-summary .summary-text {
+.report-summary .summary-text {
     color: rgb(90, 90, 90);
     font-size: 14px;
     text-align: justify;
@@ -96,7 +96,7 @@ ul {
     transition: max-height 0.3s ease;
 }
 
-.paper-summary .summary-text.expanded {
+.report-summary .summary-text.expanded {
     max-height: 1000px;
 }
 
@@ -124,7 +124,7 @@ ul {
     cursor: pointer;
 }
 
-.div-papers .paper-container-separator {
+.div-reports .report-container-separator {
     margin-top: 7px;
     margin-bottom: 7px;
     max-width: 810px;

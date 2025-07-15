@@ -20,13 +20,13 @@
     align-items: center;
 }
 
-.paper-title {
+.report-title {
     padding-left: 10px;
     font-weight: 500;
     color: rgb(51, 51, 51);
 }
 
-.paper-container {
+.report-container {
     display: flex;
     flex-direction: row;
     padding: 0px 15px;
@@ -41,7 +41,7 @@
     padding-right: 15px;
 }
 
-.img-paper-view {
+.img-report-view {
     height: 300px;
     width: 270px;
     padding-top: 10px;
@@ -104,11 +104,11 @@
     font-weight: 500;
 }
 
-.div-paper-metas {
+.div-report-metas {
     margin-bottom: 10px;
 }
 
-.div-paper-description {
+.div-report-description {
     margin-top: 5px;
     color: #595656;
 }
