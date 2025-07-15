@@ -11,7 +11,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/paper.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/report_review.css')}}">
 
 </head>
 
@@ -30,38 +30,8 @@
                     <a href="{{ url_for('home') }}"> UniScholarWorks </a>
                 </div>
 
-                <div class="submission">
-                    <a href="#"> Submit Report </a>
-                </div>
-
-                <div class="submission">
-                    <a href="#"> Submissions </a>
-                </div>
-
             </div>
 
-            <div class="right-section">
-
-                <input class="search-bar" type="text" placeholder="Search" id="search-bar">
-
-                <button class="search-button"> 
-
-                    <i class="fas fa-search"></i>
-    
-                    <div class="tooltip">
-                        Search
-                    </div>
-    
-                </button>
-
-                <div class="div-login-button">
-                    <a href="{{ url_for('login') }}">
-                        <button type="submit" class="login-button">
-                            <i class="fas fa-sign-in-alt" style="margin-right: 8px;"></i>Login
-                        </button>
-                    </a>
-                </div>
-            </div>   
 
         </div>
 
@@ -187,6 +157,49 @@
                 </div>
 
             </div>
+
+        </div>
+
+        <div class="decision-container">
+
+            <form method="post" class="decision-form">
+
+                <div class="decision-row">
+
+                    <label class="decision-label"> Decision: </label>
+
+                    <label class="radio-input">
+                        <input type="radio" name="decision" value="accept" />
+                        Accept
+                    </label>
+
+                    <label class="radio-input">
+                        <input type="radio" name="decision" value="revise" />
+                        Revise
+                    </label>
+
+                    <label class="radio-input">
+                        <input type="radio" name="decision" value="reject" />
+                        Reject
+                    </label>
+                    
+                </div>
+
+                <div class="decision-row">
+
+                    <label class="decision-label" style="display: block;"> Comment </label>
+
+                    <textarea class="comment" placeholder="Write your comment here...(Optional)" rows="5"></textarea>
+                    
+                </div>
+
+                <div class="div-submit">
+
+                    <button type="submit" class="submit-button"> Submit </button>
+
+                </div>
+
+            </form>
 
         </div>
 

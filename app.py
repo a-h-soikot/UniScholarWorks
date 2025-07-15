@@ -19,6 +19,10 @@ def register():
 def paper():
     return render_template("paper.html")
 
+@app.route("/report_review")
+def report_review():
+    return render_template("report_review.html")
+
 if __name__ == "__main__":
     app.debug = True
 
