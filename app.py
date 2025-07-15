@@ -1,11 +1,15 @@
 from flask import Flask, redirect, url_for, render_template
+import database_queries as db_queries
+
 from livereload import Server
 
 app = Flask(__name__)
 
+
 @app.route("/")
 def home():
-    return render_template("home.html")
+    reports = db_queries.get_reports() 
+    return render_template("home.html", reports=reports)
 
 @app.route("/login")
 def login():
