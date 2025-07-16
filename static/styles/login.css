@@ -33,6 +33,23 @@ span {
     color: rgb(70, 137, 195);
 }
 
+.error-message {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 12px 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 16px;
+    border-left: 4px solid #c62828;
+    display: flex;
+    align-items: center;
+}
+
+.error-message i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
 .form-group {
     margin-bottom: 20px;
     display: flex;
@@ -67,6 +84,7 @@ input {
     font-weight: 600;
     cursor: pointer;
     margin-top: 15px;
+    margin-bottom: 20px;
 }
 
 .bottom-label {

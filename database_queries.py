@@ -1,5 +1,5 @@
 import mysql.connector
-from my_classes import Report
+from my_classes import Report, User
 
 # Database configuration
 db_config = {
@@ -8,6 +8,37 @@ db_config = {
     'password': '1234',
     'database': 'uni_scholar_works'
 }
+
+
+def get_user_by_credentials(user_id, password):
+    """
+    Authenticate a user by user_id/email and password
+    Returns a User object if credentials are valid, None otherwise
+    """
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+    
+    #hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    query = """
+    SELECT * FROM students
+    WHERE (student_id = %s OR email = %s) AND password = %s
+    """
+    cursor.execute(query, (user_id, user_id, password))
+    
+    user_data = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    
+    if user_data:
+        user = User()
+        user.set_user_id(user_data['student_id'])
+        user.set_email(user_data['email'])
+        user.set_name(user_data['name'])
+        
+        return user
+    
+    return None
 
 
 def get_reports():

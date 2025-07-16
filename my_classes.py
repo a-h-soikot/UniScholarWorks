@@ -1,5 +1,42 @@
 import os
 
+
+# User Class
+class User:
+    def __init__(self):
+        self.user_id = ""
+        self.email = ""
+        self.name = ""
+        self.role = ""
+        
+    # Setters
+    def set_user_id(self, user_id):
+        self.user_id = user_id
+        
+    def set_email(self, email):
+        self.email = email
+        
+    def set_name(self, name):
+        self.name = name
+        
+    def set_role(self, role):
+        self.role = role
+        
+    # Getters
+    def get_user_id(self):
+        return self.user_id
+        
+    def get_email(self):
+        return self.email
+        
+    def get_name(self):
+        return self.name
+        
+    def get_role(self):
+        return self.role
+    
+
+# Report Class
 class Report:
     def __init__ (self):
         self.title = ""
@@ -95,3 +132,6 @@ class Report:
         if not os.path.exists(file_path):
             return False
         return True
+    
+
+        

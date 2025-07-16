@@ -22,7 +22,14 @@
 
         <div class="underline"> </div>
 
-        <form method="post">
+        {% if error %}
+        <div class="error-message">
+            <i class="fas fa-exclamation-circle"></i>
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="post" action="{{ url_for('login') }}">
 
             <div class="form-group">
 
@@ -30,7 +37,7 @@
                     <i class="fas fa-user" style="margin-right: 8px;"></i>User ID
                 </label>
 
-                <input type="text" id="userid" name="userid" placeholder="Enter your id or email" required="">
+                <input type="text" id="userid" name="userid" placeholder="Enter your id or email" required>
             
             </div>
 
@@ -40,7 +47,7 @@
                     <i class="fas fa-lock" style="margin-right: 8px;"></i>Password
                 </label>
 
-                <input type="password" id="password" name="password" placeholder="Enter your password" required="">
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
             
             </div>
 
@@ -50,10 +57,12 @@
 
         </form>
 
+        <!--
         <label class="bottom-label">
             Don't have an account?
             <a href="{{ url_for('register') }}" style="color: blue;"> Register here </a>
         </label>
+        -->
 
     </div>
     

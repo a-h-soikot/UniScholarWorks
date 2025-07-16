@@ -94,9 +94,10 @@
 
 .meta-label {
     color: rgb(0, 0, 0);
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 600;
 }
+
 
 .div-right-section a {
     color: rgb(32, 106, 171);
@@ -105,15 +106,20 @@
 
 .div-meta-data {
     padding-left: 40px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 500;
 }
+
+
 
 .div-report-metas {
     margin-bottom: 10px;
 }
 
 .div-report-description {
+    font-size: 17px;
+    text-align: justify;
     margin-top: 5px;
+    margin-bottom: 20px;
     color: #595656;
 }
