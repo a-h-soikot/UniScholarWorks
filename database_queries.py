@@ -43,3 +43,45 @@ def get_reports():
     conn.close()
 
     return reports_list
+
+def get_report_by_id(report_id):
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+
+    # Fetch report by ID
+    cursor.execute("SELECT * FROM reports WHERE report_id = %s", (report_id,))
+    row = cursor.fetchone()
+
+    if not row:
+        cursor.close()
+        conn.close()
+        return None
+
+    report = Report()
+    report.set_report_id(row['report_id'])
+    report.set_title(row['title'])
+    report.set_summary(row['summary'])
+  
+    report.set_link(row['link'])
+    report.set_supervisor(row['supervisor'])
+    report.set_report_type(row['type'])
+
+    cursor.execute("SELECT name FROM students WHERE student_id IN (SELECT student_id FROM report_authors WHERE report_id = %s)", (report_id,))
+    authors = cursor.fetchall()
+    report.set_authors([author['name'] for author in authors])
+
+    cursor.execute("SELECT tag FROM report_tag WHERE report_id = %s", (report_id,))
+    tags = cursor.fetchall()
+    report.set_tags([tag['tag'] for tag in tags])
+
+    cursor.execute("SELECT review_date, pdf_allowed FROM reviews WHERE report_id = %s", (report_id,))
+    review = cursor.fetchone()
+    report.set_date(review['review_date'])
+    report.set_pdf_allowed(review['pdf_allowed'])
+
+    report.set_file_id(row['file_id'])
+
+    cursor.close()
+    conn.close()
+
+    return report

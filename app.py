@@ -1,4 +1,5 @@
-from flask import Flask, redirect, url_for, render_template
+from flask import Flask, redirect, url_for, render_template, send_from_directory, abort
+import os
 import database_queries as db_queries
 
 from livereload import Server
@@ -19,13 +20,21 @@ def login():
 def register():
     return render_template("registration.html")
 
-@app.route("/report")
-def report():
-    return render_template("report.html")
+@app.route("/report/<int:report_id>")
+def report(report_id):
+    report = db_queries.get_report_by_id(report_id)
+    return render_template("report.html", report=report)
 
 @app.route("/report_review")
 def report_review():
     return render_template("report_review.html")
+
+
+@app.route("/download/<file_id>")
+def download_file(file_id):
+    directory = "/home/soikot/Documents/files"
+    return send_from_directory(directory, file_id, as_attachment=True)
+
 
 if __name__ == "__main__":
     app.debug = True

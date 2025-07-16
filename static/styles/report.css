@@ -78,6 +78,11 @@
     background-color: #b71c1c;
 }
 
+.download-btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
 
 .div-right-section {
     padding-left: 20px;
