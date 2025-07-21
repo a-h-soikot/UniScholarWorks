@@ -9,7 +9,7 @@
     border-width: 1px;
     border-top-width: 1px;
     font-size: 14px;
-    height: 50px;
+    height: 51px;
     width: 100%;
     color: white;
     background-image: linear-gradient(rgb(109, 148, 191), rgb(68, 110, 155) 50%, rgb(62, 100, 141));
@@ -55,6 +55,15 @@
     flex-grow: 1;
 }
 
+.search-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 1;
+    max-width: 400px;
+    margin-right: 10px;
+}
+
 .right-section .search-bar {
     border-color: rgb(204, 204, 204);
     border-style: solid;
@@ -62,11 +71,12 @@
     border-width: 1px;
     padding: 7px 10px;
     font-size: 16px;
-    max-width: 400px;
     width: 100%;
+    flex-grow: 1;
 
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
+    border-right: none;
 }
 
 .right-section .search-bar:focus {

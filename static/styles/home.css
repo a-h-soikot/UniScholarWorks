@@ -49,6 +49,45 @@ ul {
     line-height: 20px;
 }
 
+.filter-button-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    
+}
+
+.apply-filter-button {
+    background-color: rgb(68, 110, 155);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.apply-filter-button:hover {
+    background-color: rgb(52, 85, 120);
+}
+
+.reset-filter-button {
+    background-color: #f0f0f0;
+    color: #555;
+    border: 1px solid #ddd;
+    padding: 8px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.reset-filter-button:hover {
+    background-color: #e0e0e0;
+}
+
 .div-reports {
     max-width: 870px;
     padding: 25px 0px 15px 15px;

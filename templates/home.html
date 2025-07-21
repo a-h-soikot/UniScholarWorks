@@ -41,17 +41,15 @@
 
             <div class="right-section">
 
-                <input class="search-bar" type="text" placeholder="Search" id="search-bar">
-
-                <button class="search-button"> 
-
-                    <i class="fas fa-search"></i>
-    
-                    <div class="tooltip">
-                        Search
-                    </div>
-    
-                </button>
+                <form method="get" action="{{ url_for('search') }}" class="search-form">
+                    <input class="search-bar" type="text" name="q" placeholder="Search" id="search-bar" value="{{ query if query }}">
+                    <button type="submit" class="search-button"> 
+                        <i class="fas fa-search"></i>
+                        <div class="tooltip">
+                            Search
+                        </div>
+                    </button>
+                </form>
 
                 <div class="div-logout-button">
                     <a href="{{ url_for('logout') }}">
@@ -69,7 +67,7 @@
 
             <div class="div-sidebar">
 
-                <form method="get" autocomplete="off">
+                <form method="get" action="{{ url_for('home') }}" autocomplete="off">
 
                     <ul class="filter-lists">
 
@@ -77,21 +75,21 @@
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
-                                Reasearch report
+                                <input type="checkbox" name="type" value="research" {% if 'research' in selected_types %}checked{% endif %}>
+                                Research
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="type" value="thesis" {% if 'thesis' in selected_types %}checked{% endif %}>
                                 Thesis
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="type" value="dissertation" {% if 'dissertation' in selected_types %}checked{% endif %}>
                                 Dissertation
                             </label>
                         </li>
@@ -101,14 +99,14 @@
                         <li class="list-item">
                             <label>
                                 Start Date: &nbsp 
-                                <input type="date">
+                                <input type="date" name="start_date" value="{{ start_date }}">
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
                                 &nbsp End Date: &nbsp 
-                                <input type="date">
+                                <input type="date" name="end_date" value="{{ end_date }}">
                             </label>
                         </li>
 
@@ -116,68 +114,77 @@
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Machine Learning" {% if 'Machine Learning' in selected_tags %}checked{% endif %}>
                                 Machine Learning
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="CyberSecurity" {% if 'CyberSecurity' in selected_tags %}checked{% endif %}>
                                 CyberSecurity
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Data Science" {% if 'Data Science' in selected_tags %}checked{% endif %}>
                                 Data Science
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Math" {% if 'Math' in selected_tags %}checked{% endif %}>
                                 Math
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Chemistry" {% if 'Chemistry' in selected_tags %}checked{% endif %}>
                                 Chemistry
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Medicine" {% if 'Medicine' in selected_tags %}checked{% endif %}>
                                 Medicine
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Education" {% if 'Education' in selected_tags %}checked{% endif %}>
                                 Education
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Technology" {% if 'Technology' in selected_tags %}checked{% endif %}>
                                 Technology
                             </label>
                         </li>
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox">
+                                <input type="checkbox" name="tag" value="Psychology" {% if 'Psychology' in selected_tags %}checked{% endif %}>
                                 Psychology
                             </label>
                         </li>
 
                     </ul>
+                    
+                    <div class="filter-button-container">
+                        <button type="submit" class="apply-filter-button">
+                            <i class="fas fa-filter" style="margin-right: 8px;"></i>Apply Filters
+                        </button>
+                        <button type="reset" class="reset-filter-button">
+                            <i class="fas fa-redo" style="margin-right: 8px;"></i>Reset
+                        </button>
+                    </div>
 
                     <ul style="margin-top: 25px;">
 
@@ -195,6 +202,14 @@
             </div>
 
             <div class="div-reports">
+
+                {% if not reports %}
+                    <div style="width: 850px; text-align: center; color: gray; margin: 0 auto;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        No reports found.
+                    </div>
+                {% endif %}
+                
                 <table> 
 
                     {% for report in reports %}

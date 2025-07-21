@@ -41,38 +41,201 @@ def get_user_by_credentials(user_id, password):
     return None
 
 
-def get_reports():
+def get_filtered_reports(report_types=None, tags=None, start_date=None, end_date=None):
     conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor(dictionary=True)  # dictionary=True gives column names
+    cursor = conn.cursor(dictionary=True)
 
-    # Fetch all reports
-    cursor.execute("SELECT reports.report_id, title, summary, review_date FROM reports inner join reviews on reports.report_id = reviews.report_id where reviews.decision = 'accepted' order by review_date desc")
-    reports = cursor.fetchall()
-
+    print(start_date, end_date, report_types, tags)
+    
+    # Base query
+    query = """
+    SELECT DISTINCT reports.report_id, title, summary, review_date 
+    FROM reports 
+    INNER JOIN reviews ON reports.report_id = reviews.report_id
+    """
+    
+    conditions = ["reviews.decision = 'accepted'"]
+    params = []
+    
+    # Add type filter
+    if report_types and len(report_types) > 0:
+        type_placeholders = ', '.join(['%s'] * len(report_types))
+        conditions.append(f"reports.type IN ({type_placeholders})")
+        params.extend(report_types)
+    
+    # Add tag filter
+    if tags and len(tags) > 0:
+        query += " INNER JOIN report_tag ON reports.report_id = report_tag.report_id"
+        tag_placeholders = ', '.join(['%s'] * len(tags))
+        conditions.append(f"report_tag.tag IN ({tag_placeholders})")
+        params.extend(tags)
+    
+    # Add date filters
+    if start_date:
+        conditions.append("DATE(reviews.review_date) >= %s")
+        params.append(start_date)
+    
+    if end_date:
+        conditions.append("DATE(reviews.review_date) <= %s")
+        params.append(end_date)
+    
+    # Add all conditions to the query
+    if conditions:
+        query += " WHERE " + " AND ".join(conditions)
+    
+    # Add ordering
+    query += " ORDER BY review_date DESC"
+    
+    # Execute the query
+    cursor.execute(query, params)
+    rows = cursor.fetchall()
+    
     reports_list = []
-
-    for row in reports:
-
+    
+    for row in rows:
         report = Report()
-
+        
         report.set_report_id(row['report_id'])
         report.set_title(row['title'])
         report.set_summary(row['summary'])
         report.set_date(row['review_date'])
-
-        cursor.execute("SELECT name from students where student_id in (SELECT student_id from report_authors  WHERE report_id = %s)", (row['report_id'], ))
+        
+        # Get authors
+        cursor.execute("""
+            SELECT name FROM students 
+            WHERE student_id IN (
+                SELECT student_id FROM report_authors 
+                WHERE report_id = %s
+            )
+        """, (row['report_id'],))
+        
         authors = cursor.fetchall()
         report.set_authors([author['name'] for author in authors])
-
-        cursor.execute("SELECT tag from report_tag WHERE report_id = %s", (row['report_id'], ))
+        
+        # Get tags
+        cursor.execute("SELECT tag FROM report_tag WHERE report_id = %s", (row['report_id'],))
         tags = cursor.fetchall()
         report.set_tags([tag['tag'] for tag in tags])
-
+        
         reports_list.append(report)
-
+    
     cursor.close()
     conn.close()
+    
+    return reports_list
 
+
+def get_reports():
+    return get_filtered_reports()
+
+def search_reports(query, report_types=None, tags=None, start_date=None, end_date=None):
+
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+    
+    # Base query
+    query_sql = """
+    SELECT DISTINCT reports.report_id, title, summary, review_date 
+    FROM reports 
+    INNER JOIN reviews ON reports.report_id = reviews.report_id
+    """
+    
+    conditions = ["reviews.decision = 'accepted'"]
+    params = []
+    
+    # Add search conditions
+    if query and query.strip():
+      
+        search_terms = query.split()
+        search_conditions = []
+        
+        for term in search_terms:
+            search_term = f"%{term}%"
+            
+            # Combine conditions with OR for the same term
+            term_condition = """
+                (reports.title LIKE %s OR 
+                reports.summary LIKE %s)
+            """
+            params.extend([search_term, search_term])
+            
+            search_conditions.append(term_condition)
+        
+        # Join all search terms with AND
+        if search_conditions:
+            conditions.append("(" + " AND ".join(search_conditions) + ")")
+    
+    # Add type filter
+    if report_types and len(report_types) > 0:
+        type_placeholders = ', '.join(['%s'] * len(report_types))
+        conditions.append(f"reports.type IN ({type_placeholders})")
+        params.extend(report_types)
+    
+    # Add tag filter
+    if tags and len(tags) > 0:
+        query_sql += " INNER JOIN report_tag ON reports.report_id = report_tag.report_id"
+        tag_placeholders = ', '.join(['%s'] * len(tags))
+        conditions.append(f"report_tag.tag IN ({tag_placeholders})")
+        params.extend(tags)
+    
+    # Add date filters
+    if start_date:
+        conditions.append("DATE(reviews.review_date) >= %s")
+        params.append(start_date)
+    
+    if end_date:
+        conditions.append("DATE(reviews.review_date) <= %s")
+        params.append(end_date)
+    
+    # Add all conditions to the query
+    if conditions:
+        query_sql += " WHERE " + " AND ".join(conditions)
+    
+    # Add ordering
+    query_sql += " ORDER BY review_date DESC"
+    
+    # Execute the query
+    cursor.execute(query_sql, params)
+    rows = cursor.fetchall()
+    
+    reports_list = []
+    
+    for row in rows:
+        report = Report()
+        
+        report.set_report_id(row['report_id'])
+        report.set_title(row['title'])
+        report.set_summary(row['summary'])
+        report.set_date(row['review_date'])
+        
+        # Get authors
+        cursor.execute("""
+            SELECT name FROM students 
+            WHERE student_id IN (
+                SELECT student_id FROM report_authors 
+                WHERE report_id = %s
+            )
+        """, (row['report_id'],))
+        
+        authors = cursor.fetchall()
+        report.set_authors([author['name'] for author in authors])
+        
+        # Get tags
+        cursor.execute("SELECT tag FROM report_tag WHERE report_id = %s", (row['report_id'],))
+        tags = cursor.fetchall()
+        report.set_tags([tag['tag'] for tag in tags])
+        
+        # Additional report details if needed
+        cursor.execute("SELECT type FROM reports WHERE report_id = %s", (row['report_id'],))
+        report_type = cursor.fetchone()
+        if report_type:
+            report.set_report_type(report_type['type'])
+        
+        reports_list.append(report)
+    
+    cursor.close()
+    conn.close()
+    
     return reports_list
 
 def get_report_by_id(report_id):

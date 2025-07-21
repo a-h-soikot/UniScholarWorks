@@ -53,14 +53,70 @@ def logout():
     return redirect(url_for("login"))
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def home():
     if "user_id" not in session:
         return redirect(url_for("login"))
     
-    reports = db_queries.get_reports() 
-    return render_template("home.html", reports=reports)
+    # Get filter parameters from request
+    report_types = request.args.getlist('type')
+    tags = request.args.getlist('tag')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    
+    # Get reports with filters
+    reports = db_queries.get_filtered_reports(
+        report_types=report_types, 
+        tags=tags,
+        start_date=start_date,
+        end_date=end_date
+    )
+    
+    # Pass both reports and filter selections back to the template
+    return render_template("home.html", 
+        reports=reports,
+        selected_types=report_types,
+        selected_tags=tags,
+        start_date=start_date,
+        end_date=end_date
+    )
 
+
+@app.route("/search", methods=["GET"])
+def search():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    # Get search query
+    query = request.args.get('q', '')
+    
+    if not query:
+        return redirect(url_for('home'))
+    
+    # Get filter parameters from request
+    report_types = request.args.getlist('type')
+    tags = request.args.getlist('tag')
+    start_date = request.args.get('start_date')
+    end_date = request.args.get('end_date')
+    
+    # Search reports with query and filters
+    reports = db_queries.search_reports(
+        query=query,
+        report_types=report_types, 
+        tags=tags,
+        start_date=start_date,
+        end_date=end_date
+    )
+    
+    # Pass both reports and filter selections back to the template
+    return render_template("home.html", 
+        reports=reports,
+        query=query,
+        selected_types=report_types,
+        selected_tags=tags,
+        start_date=start_date,
+        end_date=end_date
+    )
 
 @app.route("/report/<int:report_id>")
 def report(report_id):

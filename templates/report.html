@@ -4,7 +4,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> report </title>
+    <title> Report </title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -42,17 +42,15 @@
 
             <div class="right-section">
 
-                <input class="search-bar" type="text" placeholder="Search" id="search-bar">
-
-                <button class="search-button"> 
-
-                    <i class="fas fa-search"></i>
-    
-                    <div class="tooltip">
-                        Search
-                    </div>
-    
-                </button>
+                <form method="get" action="{{ url_for('search') }}" class="search-form">
+                    <input class="search-bar" type="text" name="q" placeholder="Search" id="search-bar" value="{{ query if query }}">
+                    <button type="submit" class="search-button"> 
+                        <i class="fas fa-search"></i>
+                        <div class="tooltip">
+                            Search
+                        </div>
+                    </button>
+                </form>
 
                 <div class="div-logout-button">
                     <a href="{{ url_for('logout') }}">
