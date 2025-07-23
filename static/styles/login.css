@@ -19,18 +19,65 @@ h2 {
 }
 
 .underline {
-
     background-color: rgb(104, 128, 236);
     height: 3px;
     width: 70px;
     border-radius: 3px;
     margin: 0 auto;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+}
+
+.user-type-toggle {
+    display: flex;
+    background-color: #f5f7fa;
+    border-radius: 12px;
+    height: 40px;
+    overflow: hidden;
+    margin-bottom: 30px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e1e5eb;
+}
+
+.toggle-option {
+    flex: 1;
+    text-align: center;
+    padding: 15px 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #666;
+    position: relative;
+    overflow: hidden;
+}
+
+.toggle-option i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.toggle-option.active {
+    background-color: rgb(92, 162, 223);
+    box-shadow: 0 3px 3px rgba(75, 102, 220, 0.1);
+    animation: pulse 2s infinite;
+    color: white;
     
+}
+
+
+
+.toggle-option:not(.active):hover {
+    background-color: #e9ecef;
 }
 
 span {
     color: rgb(70, 137, 195);
+}
+
+.user-type-toggle span {
+    color: #575757;
 }
 
 .error-message {
@@ -75,7 +122,7 @@ input {
 
 .login-button {
     padding: 14px ;
-    background-color: rgb(75, 102, 220);
+    background-color: rgb(70, 137, 195);
     color: white;
     border: none;
     border-radius: 8px;

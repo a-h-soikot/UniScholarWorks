@@ -11,6 +11,9 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}">
+    
+    <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='scripts/login.js') }}" defer></script>
 
 </head>
 
@@ -22,6 +25,21 @@
 
         <div class="underline"> </div>
 
+        <div class="user-type-toggle">
+
+            <div class="toggle-option student {% if user_type != 'teacher' %}active{% endif %}" data-user-type="student">
+                <i class="fas fa-user-graduate"></i>
+                <span> Student </span>
+            </div>
+
+            <div class="toggle-option teacher {% if user_type == 'teacher' %}active{% endif %}" data-user-type="teacher">
+                <i class="fas fa-chalkboard-teacher"></i>
+                <span>Teacher</span>
+            </div>
+
+        </div>
+
+
         {% if error %}
         <div class="error-message">
             <i class="fas fa-exclamation-circle"></i>
@@ -30,14 +48,16 @@
         {% endif %}
 
         <form method="post" action="{{ url_for('login') }}">
-
+            <input type="hidden" id="user_type" name="user_type" value="{% if user_type %}{{ user_type }}{% else %}student{% endif %}">
+            
             <div class="form-group">
 
-                <label for="userid">
-                    <i class="fas fa-user" style="margin-right: 8px;"></i>User ID
+                <label for="userid" id="userid-label">
+                    <i class="fas {% if user_type == 'teacher' %}fa-chalkboard-teacher{% else %}fa-user-graduate{% endif %}" style="margin-right: 8px;"></i> 
+                    {% if user_type == 'teacher' %}Teacher ID{% else %}Student ID{% endif %}
                 </label>
 
-                <input type="text" id="userid" name="userid" placeholder="Enter your id or email" required>
+                <input type="text" id="userid" name="userid" placeholder="{% if user_type == 'teacher' %}Enter your teacher id or email{% else %}Enter your student id or email{% endif %}" required>
             
             </div>
 

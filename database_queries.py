@@ -11,11 +11,8 @@ db_config = {
 }
 
 
-def get_user_by_credentials(user_id, password):
-    """
-    Authenticate a user by user_id/email and password
-    Returns a User object if credentials are valid, None otherwise
-    """
+def get_user_by_credentials(user_id, password, user_type):
+ 
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
     
@@ -25,6 +22,12 @@ def get_user_by_credentials(user_id, password):
     SELECT * FROM students
     WHERE (student_id = %s OR email = %s) AND password = %s
     """
+
+    if user_type == "teacher":
+        query = """
+        SELECT * FROM teachers
+        WHERE (teacher_id = %s OR email = %s) AND password = %s
+        """
     cursor.execute(query, (user_id, user_id, password))
     
     user_data = cursor.fetchone()
@@ -33,7 +36,7 @@ def get_user_by_credentials(user_id, password):
     
     if user_data:
         user = User()
-        user.set_user_id(user_data['student_id'])
+        user.set_user_id(user_data['student_id'] if user_type == "student" else user_data['teacher_id'])
         user.set_email(user_data['email'])
         user.set_name(user_data['name'])
         

@@ -24,15 +24,17 @@ def login():
     if request.method == "POST":
         user_id = request.form.get("userid")
         password = request.form.get("password")
-        
+
+        print(request.form.get("user_type"))
         # Validate the credentials
-        user = db_queries.get_user_by_credentials(user_id, password)
+        user = db_queries.get_user_by_credentials(user_id, password, request.form.get("user_type"))
         
         if user:
             # Store user info in session
             session["user_id"] = user.get_user_id()
             session["email"] = user.get_email()
             session["name"] = user.get_name()
+            session["user_type"] = request.form.get("user_type")
             
             session.permanent = True
             # Redirect to home page after successful login
@@ -40,10 +42,11 @@ def login():
         else:
             # Show error message for failed login
             error = "Invalid username or password"
-            return render_template("login.html", error=error)
+            return render_template("login.html", error=error, user_type=request.form.get("user_type"))
             
     # For GET requests, just show the login form
-    return render_template("login.html")
+    user_type = request.args.get("user_type", "student")  # Default to student if not specified
+    return render_template("login.html", user_type=user_type)
 
 @app.route("/register")
 def register():
