@@ -24,6 +24,7 @@
     justify-content: space-between;
 
     box-sizing: border-box;
+    border-radius: 3px;
 }
 
 .left-section {
@@ -62,6 +63,7 @@
     flex-grow: 1;
     max-width: 400px;
     margin-right: 10px;
+    margin-left: 20px;
 }
 
 .right-section .search-bar {
@@ -87,7 +89,7 @@
     background: linear-gradient(to bottom, #4a79bd, #3264a1);
     border: none;
     padding: 6px 12px;
-    margin-right: 20px;
+    margin-right: 15px;
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
     cursor: pointer;

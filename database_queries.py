@@ -1,3 +1,4 @@
+from curses import flash
 import mysql.connector
 from my_classes import Report, User
 
@@ -44,8 +45,6 @@ def get_user_by_credentials(user_id, password):
 def get_filtered_reports(report_types=None, tags=None, start_date=None, end_date=None):
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
-
-    print(start_date, end_date, report_types, tags)
     
     # Base query
     query = """
@@ -279,3 +278,92 @@ def get_report_by_id(report_id):
     conn.close()
 
     return report
+    
+def submit_new_report(title, report_type, authors, supervisor, summary=None, link=None, file_id=None, tags=None, submitter_id=None):
+    
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    
+    try:
+        conn.start_transaction()
+        
+        # Insert report
+        cursor.execute("""
+            INSERT INTO reports (title, summary, type, supervisor, link, file_id, submitter_id)
+            VALUES (%s, %s, %s, %s, %s, %s, %s)
+        """, (title, summary, report_type, supervisor, link, file_id, submitter_id))
+        
+        report_id = cursor.lastrowid
+        
+        # Insert authors
+        # First, find student_ids for the authors
+        for author_id in authors:
+            # Try to find the student by ID
+            cursor.execute("SELECT student_id FROM students WHERE student_id = %s", (author_id,))
+            result = cursor.fetchone()
+            
+            if result:
+                # Student exists
+                student_id = result[0]
+            else:
+                flash(f"Student/Author with ID '{author_id}' not found in the database.", 'error')
+                return False
+            
+            # Link author to report
+            cursor.execute("""
+                INSERT INTO report_authors (report_id, student_id)
+                VALUES (%s, %s)
+            """, (report_id, student_id))
+        
+        # Insert tags
+        if tags:
+            for tag in tags:
+                cursor.execute("""
+                    INSERT INTO report_tag (report_id, tag)
+                    VALUES (%s, %s)
+                """, (report_id, tag))
+        
+
+        # Commit transaction
+        conn.commit()
+        
+        return True
+        
+    except Exception as e:
+        conn.rollback()
+        flash(f"Error submitting report: {str(e)}", 'error')
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+        
+def get_all_supervisors():
+    
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("SELECT teacher_id, name FROM teachers")
+    supervisors = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    return supervisors
+
+def get_common_tags():
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+    
+    cursor.execute("""
+        SELECT tag, COUNT(*) as count 
+        FROM report_tag 
+        GROUP BY tag 
+        ORDER BY count DESC 
+        LIMIT 10
+    """)
+    tags = cursor.fetchall()
+    
+    cursor.close()
+    conn.close()
+    
+    return [t['tag'] for t in tags]

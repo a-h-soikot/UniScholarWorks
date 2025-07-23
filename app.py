@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, session, request, flash, send_from_directory, abort
+from flask import Flask, redirect, url_for, render_template, session, request, flash, send_from_directory, abort, json
 import os
 import database_queries as db_queries
 
@@ -8,6 +8,9 @@ from livereload import Server
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Use a secure random key for session management
 app.permanent_session_lifetime = timedelta(days=1)  # Set session lifetime
+app.config['SESSION_USE_SIGNER'] = True  # Sign session cookies for security
+app.config['SESSION_PERMANENT'] = True   # Make sessions permanent by default
+app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True  # Preserve context (including flash messages) on exceptions
 
 
 
@@ -126,12 +129,80 @@ def report(report_id):
     report = db_queries.get_report_by_id(report_id)
     return render_template("report.html", report=report)
 
-@app.route("/report_review")
-def report_review():
+
+
+@app.route("/submit_report", methods=["GET", "POST"])
+def submit_report():
     if "user_id" not in session:
         return redirect(url_for("login"))
+
+    if request.method == "POST":
+        # Get form data
+        title = request.form.get('title')
+        report_type = request.form.get('report_type')
+        description = request.form.get('description')
+        report_link = request.form.get('report_link')
+        supervisor = request.form.get('supervisor_id')
         
-    return render_template("report_review.html")
+        # Get authors (may be multiple)
+        authors = request.form.getlist('authors[]')
+        
+        # Get tags (split by comma)
+        tags_input = request.form.get('tags')
+        tags = tags_input.split(',') if tags_input else []
+        tags = [tag.strip() for tag in tags if tag.strip()]
+        
+        # Handle file upload
+        file_id = None
+        if 'pdf_file' in request.files and request.files['pdf_file'].filename:
+            pdf_file = request.files['pdf_file']
+ 
+            import uuid
+            file_id = f"{uuid.uuid4()}.pdf"
+
+            upload_folder = "/home/soikot/Documents/files"
+
+            file_path = os.path.join(upload_folder, file_id)
+            pdf_file.save(file_path)
+        
+        # Validate required fields
+        if not title or not report_type or not authors or not supervisor:
+            flash('Please fill in all required fields with valid information.', 'error')
+            # Get supervisors and common tags for the form
+            supervisors = db_queries.get_all_supervisors()
+            common_tags = db_queries.get_common_tags()
+            return render_template("submit_report.html", 
+                                 error='Please fill in all required fields with valid information.',
+                                 supervisors=supervisors,
+                                 common_tags=common_tags)
+        
+        # Submit the report to database
+        submission_status = db_queries.submit_new_report(
+            title=title,
+            report_type=report_type,
+            authors=authors,
+            supervisor=supervisor,
+            summary=description,
+            link=report_link,
+            file_id=file_id,
+            tags=tags,
+            submitter_id=session["user_id"]
+        )
+        
+        if submission_status is True:
+            flash('Report submitted successfully! It will be reviewed by the supervisor.', 'success')
+            return redirect(url_for('home'))
+        else:
+            flash('Error submitting report. Please try again.', 'error')
+            return redirect(url_for('submit_report'))
+    
+    # For GET requests, show the submission form
+    supervisors = db_queries.get_all_supervisors()
+    common_tags = db_queries.get_common_tags()
+    
+    return render_template("submit_report.html", 
+                         supervisors=supervisors,
+                         common_tags=common_tags)
 
 
 @app.route("/download/<file_id>")
@@ -143,6 +214,15 @@ def download_file(file_id):
     directory = "/home/soikot/Documents/files"
         
     return send_from_directory(directory, file_id, as_attachment=True)
+
+
+@app.route("/report_review")
+def report_review():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+        
+    return render_template("report_review.html")
+
 
 
 if __name__ == "__main__":

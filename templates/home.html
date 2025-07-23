@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css')}}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
 
 </head>
 
@@ -30,7 +31,7 @@
                 </div>
 
                 <div class="submission">
-                    <a href="#"> Submit Report </a>
+                    <a href="{{ url_for('submit_report') }}"> Submit Report </a>
                 </div>
 
                 <div class="submission">
@@ -63,6 +64,22 @@
 
         </div>
 
+        <div class="flash-messages">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                {% for category, message in messages %}
+                  <div class="flash-message {{ category }}">
+                    <div class="message-content">
+                      <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                      {{ message }}
+                    </div>
+                    <span class="flash-close">&times;</span>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            {% endwith %}
+        </div>
+
         <div class="sidebar-and-report">
 
             <div class="div-sidebar">
@@ -75,6 +92,13 @@
 
                         <li class="list-item">
                             <label>
+                                <input type="checkbox" name="type" value="thesis" {% if 'thesis' in selected_types %}checked{% endif %}>
+                                Thesis
+                            </label>
+                        </li>
+
+                        <li class="list-item">
+                            <label>
                                 <input type="checkbox" name="type" value="research" {% if 'research' in selected_types %}checked{% endif %}>
                                 Research
                             </label>
@@ -82,8 +106,8 @@
 
                         <li class="list-item">
                             <label>
-                                <input type="checkbox" name="type" value="thesis" {% if 'thesis' in selected_types %}checked{% endif %}>
-                                Thesis
+                                <input type="checkbox" name="type" value="project" {% if 'project' in selected_types %}checked{% endif %}>
+                                Project
                             </label>
                         </li>
 
@@ -191,7 +215,7 @@
                         <li class="list-header"> About </li>
 
                         <li class="list-item" style="text-align: justify;">
-                            UniScholarWorks is a free and open digital library for Research reports, Thesis, and Dissertation works done by students.
+                            UniScholarWorks is a free and open digital library for Thesis, Project, Research and Dissertation Reports works done by students.
                             UniScholarWorks aim to enhance accessibility to students' work and collaboration among student, to motivate students to Research works.
                         </li>
 
