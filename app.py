@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, session, request, flash, send_from_directory, abort, json
+from flask import Flask, redirect, url_for, render_template, session, request, flash, send_from_directory, abort
 import os
 import database_queries as db_queries
 
@@ -167,7 +167,6 @@ def submit_report():
         
         # Validate required fields
         if not title or not report_type or not authors or not supervisor:
-            flash('Please fill in all required fields with valid information.', 'error')
             # Get supervisors and common tags for the form
             supervisors = db_queries.get_all_supervisors()
             common_tags = db_queries.get_common_tags()
@@ -190,7 +189,7 @@ def submit_report():
         )
         
         if submission_status is True:
-            flash('Report submitted successfully! It will be reviewed by the supervisor.', 'success')
+            flash('Report submitted successfully. It will be reviewed by the supervisor.', 'success')
             return redirect(url_for('home'))
         else:
             flash('Error submitting report. Please try again.', 'error')

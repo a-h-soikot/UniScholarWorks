@@ -1,4 +1,4 @@
-from curses import flash
+from flask import flash
 import mysql.connector
 from my_classes import Report, User
 
