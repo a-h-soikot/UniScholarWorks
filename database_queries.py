@@ -370,3 +370,61 @@ def get_common_tags():
     conn.close()
     
     return [t['tag'] for t in tags]
+
+
+
+def get_submitted_reports_by_user(user_id):
+    
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT * FROM reports
+        WHERE submitter_id = %s
+        order by report_id DESC
+    """, (user_id,))
+    
+    rows = cursor.fetchall()
+    
+    reports_list = []
+    
+    for row in rows:
+        report = Report()
+        
+        report.set_report_id(row['report_id'])
+        report.set_title(row['title'])
+        report.set_summary(row['summary'])
+        report.set_date(row['submission_date'])
+        report.set_submitter_id(row['submitter_id'])
+        
+        # Get authors
+        cursor.execute("""
+            SELECT name FROM students 
+            WHERE student_id IN (
+                SELECT student_id FROM report_authors 
+                WHERE report_id = %s
+            )
+        """, (row['report_id'],))
+        
+        authors = cursor.fetchall()
+        report.set_authors([author['name'] for author in authors])
+        
+        # Get tags
+        cursor.execute("SELECT tag FROM report_tag WHERE report_id = %s", (row['report_id'],))
+        tags = cursor.fetchall()
+        report.set_tags([tag['tag'] for tag in tags])
+        
+        # Get submission status
+        cursor.execute("SELECT decision FROM reviews WHERE report_id = %s", (row['report_id'],))
+        review = cursor.fetchone()
+        if review:
+            report.set_report_status(review['decision'])
+        else:
+            report.set_report_status("pending")
+
+        reports_list.append(report)
+    
+    cursor.close()
+    conn.close()
+    
+    return reports_list

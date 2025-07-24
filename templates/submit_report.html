@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UniScholarWorks </title>
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/submit_report.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/submit_report.css')}}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
@@ -33,12 +33,12 @@
                     <a href="{{ url_for('home') }}"> UniScholarWorks </a>
                 </div>
 
-                <div class="submission">
+                <div class="submission" style="color: white; font-weight: 600;">
                     <a href="{{ url_for('submit_report') }}"> Submit Report </a>
                 </div>
 
                 <div class="submission">
-                    <a href="#"> Submissions </a>
+                    <a href="{{ url_for('submissions') }}"> Submissions </a>
                 </div>
 
             </div>

@@ -25,7 +25,6 @@ def login():
         user_id = request.form.get("userid")
         password = request.form.get("password")
 
-        print(request.form.get("user_type"))
         # Validate the credentials
         user = db_queries.get_user_by_credentials(user_id, password, request.form.get("user_type"))
         
@@ -205,6 +204,15 @@ def submit_report():
     return render_template("submit_report.html", 
                          supervisors=supervisors,
                          common_tags=common_tags)
+
+@app.route("/submissions")
+def submissions():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+    
+    reports = db_queries.get_submitted_reports_by_user(session["user_id"])
+    
+    return render_template("submissions.html", reports=reports)
 
 
 @app.route("/download/<file_id>")

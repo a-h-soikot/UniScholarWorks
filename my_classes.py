@@ -50,6 +50,8 @@ class Report:
         self.supervisor = ""
         self.report_type = ""
         self.pdf_allowed = False
+        self.report_status = ""
+        self.submitter_id = ""
     
     # Setters
     def set_title(self, title):
@@ -88,7 +90,12 @@ class Report:
             self.pdf_allowed = True
         else:
             self.pdf_allowed = False
-        
+
+    def set_report_status(self, status):
+        self.report_status = status  
+
+    def set_submitter_id(self, submitter_id):
+        self.submitter_id = submitter_id
 
     # Getters
     def get_title(self):
@@ -132,6 +139,9 @@ class Report:
         if not os.path.exists(file_path):
             return False
         return True
-    
 
-        
+    def get_report_status(self):
+        return self.report_status.capitalize()
+
+    def get_submitter_id(self):
+        return self.submitter_id

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> UniScholarWorks </title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/submissions.css')}}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
+
+</head>
+
+<body>
+
+    <div class="page-container">
+
+        <div class="header">
+
+            <div class="left-section">
+                <div class="logo">
+                    <img width="28" height="28" src="https://img.icons8.com/fluency/96/book--v1.png" alt="book--v1"/>
+                </div>
+
+                <div class="title">
+                    <a href="{{ url_for('home') }}"> UniScholarWorks </a>
+                </div>
+
+                <div class="submission">
+                    <a href="{{ url_for('submit_report') }}"> Submit Report </a>
+                </div>
+
+                <div class="submission" style="color: white; font-weight: 600;">
+                    <a href="{{ url_for('submissions') }}"> Submissions </a>
+                </div>
+
+            </div>
+
+            <div class="right-section">
+
+                <form method="get" action="{{ url_for('search') }}" class="search-form">
+                    <input class="search-bar" type="text" name="q" placeholder="Search" id="search-bar" value="{{ query if query }}">
+                    <button type="submit" class="search-button"> 
+                        <i class="fas fa-search"></i>
+                        <div class="tooltip">
+                            Search
+                        </div>
+                    </button>
+                </form>
+
+                <div class="div-logout-button">
+                    <a href="{{ url_for('logout') }}">
+                        <button type="submit" class="logout-button">
+                            <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>Logout
+                        </button>
+                    </a>
+                </div>
+                
+            </div>   
+
+        </div>
+
+
+        <table border="1">
+            
+            <thead>
+                <tr>
+                    <th> Submissions </th>
+                    <th> Status </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+
+                {% for report in reports %}
+
+                <tr>
+                    <td>
+                        <div class="report-container">
+                            <h4 class="report-title"> 	
+                                <a href="{{ url_for('report', report_id=report.get_report_id()) }}"> {{ report.get_title() }} </a>
+                            </h4>
+
+                            <div class="autors-and-date">
+                                <span class="authors"> 
+                                    {% for author in report.get_authors() %}
+                                        {{ author }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="date"> 
+                                    &nbsp — {{ report.get_date() }}
+                                </span>
+                            </div>
+
+                            <div class="report-summary">
+                                <div class="summary-text">
+                                    {{ report.get_summary() }}
+                                </div>
+                            </div>
+
+                            <div class="tags">
+
+                                {% for tag in report.get_tags() %}
+                                    <a class="tag" href="#"> <i class="fas fa-tag"></i> {{ tag }} </a>
+                                {% endfor %}
+
+                            </div>
+
+                            <div class="submission-details">
+                                Submitted by: {{ report.get_submitter_id() }},  
+                                Submission Date: {{ report.get_date() }}
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                
+
+                    <td> {{ report.get_report_status() }} </td>
+                
+                </tr>
+
+                {% endfor %}
+                
+            </tbody>
+</table>
+
+    </div>
+
+</body>
+</html>
