@@ -48,6 +48,9 @@ class Report:
         self.link = ""
         self.file_id = ""
         self.supervisor = ""
+        self.decision = None
+        self.pdf_allowed = False
+        self.comment = ""
         self.report_type = ""
         self.pdf_allowed = False
         self.report_status = ""
@@ -79,6 +82,15 @@ class Report:
     def set_file_id(self, file_id):
         if file_id is not None:
             self.file_id = file_id
+            
+    def set_decision(self, decision):
+        self.decision = decision
+        
+    def set_pdf_allowed(self, pdf_allowed):
+        self.pdf_allowed = pdf_allowed
+        
+    def set_comment(self, comment):
+        self.comment = comment
 
     def set_supervisor(self, supervisor):
         self.supervisor = supervisor
@@ -126,6 +138,15 @@ class Report:
     
     def get_file_id(self):
         return self.file_id
+        
+    def get_decision(self):
+        return self.decision
+        
+    def get_pdf_allowed(self):
+        return self.pdf_allowed
+        
+    def get_comment(self):
+        return self.comment
 
     def get_supervisor(self):
         return self.supervisor

@@ -21,6 +21,7 @@
 
 .report-container {
     max-width: 830px;
+    min-width: 830px;
 }
 
 .report-title {

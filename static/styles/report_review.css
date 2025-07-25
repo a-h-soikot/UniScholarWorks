@@ -195,13 +195,13 @@ textarea:focus {
 }
 
 .submit-button {
-    padding: 8px ;
+    padding: 6px ;
     background-color: rgb(55, 121, 191);
     color: white;
     border: none;
 
     width: 100%;
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 600;
     cursor: pointer;
 }

@@ -271,11 +271,13 @@ def get_report_by_id(report_id):
     tags = cursor.fetchall()
     report.set_tags([tag['tag'] for tag in tags])
 
-    cursor.execute("SELECT review_date, pdf_allowed FROM reviews WHERE report_id = %s", (report_id,))
+    cursor.execute("SELECT review_date, pdf_allowed, decision, comment FROM reviews WHERE report_id = %s", (report_id,))
     review = cursor.fetchone()
     if review:
         report.set_date(review['review_date'])
         report.set_pdf_allowed(review['pdf_allowed'])
+        report.set_decision(review['decision'])
+        report.set_comment(review['comment'])
 
     report.set_file_id(row['file_id'])
 
@@ -495,3 +497,27 @@ def get_submitted_reports_by_supervisor(supervisor_id):
     conn.close()
 
     return pending_reports_list, reviewed_reports_list
+    
+
+def submit_report_review(report_id, reviewer_id, decision, pdf_allowed, comment=None):
+    
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    
+    try:
+        # Insert new review
+        cursor.execute("""
+            INSERT INTO reviews (report_id, teacher_id, decision, pdf_allowed, comment)
+            VALUES (%s, %s, %s, %s, %s)
+            """, (report_id, reviewer_id, decision, pdf_allowed, comment))
+        
+        conn.commit()
+        return True
+        
+    except Exception as e:
+        conn.rollback()
+        flash(f"Error submitting review: {str(e)}", 'error')
+        return False
+    finally:
+        cursor.close()
+        conn.close()

@@ -236,13 +236,40 @@ def reviews():
                            reviewed_reports=reviewed_reports)
 
 
-@app.route("/report_review/<int:report_id>")
+@app.route("/report_review/<int:report_id>", methods=["GET", "POST"])
 def report_review(report_id):
     if "user_id" not in session or session["user_type"] != 'teacher':
         return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        decision = request.form.get("decision")
+        allow_pdf = request.form.get("allow_pdf")
+        comment = request.form.get("comment", "")
         
+        
+        # Validate required fields
+        if not decision:
+            flash("Please select a decision.", "error")
+            report = db_queries.get_report_by_id(report_id)
+            return render_template("report_review.html", report=report, user_type=session["user_type"])
+        
+        # Submit the review
+        success = db_queries.submit_report_review(
+            report_id=report_id,
+            reviewer_id=session["user_id"],
+            decision=decision,
+            pdf_allowed=allow_pdf,
+            comment=comment
+        )
+        
+        if success:
+            flash("Review submitted successfully!", "success")
+            return redirect(url_for("reviews"))
+        else:
+            flash("An error occurred while submitting the review. Please try again.", "error")
+            
     report = db_queries.get_report_by_id(report_id)
-    return render_template("report_review.html", report=report, user_type = session["user_type"])
+    return render_template("report_review.html", report=report, user_type=session["user_type"])
 
 
 @app.route("/download/<file_id>")

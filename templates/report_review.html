@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/report_review.css')}}">
+    <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
 
 </head>
 
@@ -26,7 +27,7 @@
                     <img width="28" height="28" src="https://img.icons8.com/fluency/96/book--v1.png" alt="book--v1"/>
                 </div>
 
-                <div class="title" style="color: white; font-weight: 600;">
+                <div class="title">
                     <a href="{{ url_for('home') }}"> UniScholarWorks </a>
                 </div>
 
@@ -198,24 +199,40 @@
 
         <div class="decision-container">
 
-            <form method="post" class="decision-form">
+            <form method="post" action="{{ url_for('report_review', report_id=report.get_report_id()) }}" class="decision-form">
+                
+                <div class="flash-messages">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="flash-message {{ category }}">
+                            <div class="message-content">
+                              <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                              {{ message }}
+                            </div>
+                            <span class="flash-close">&times;</span>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                </div>
 
                 <div class="decision-row">
 
                     <label class="decision-label"> Decision: </label>
 
                     <label class="radio-input">
-                        <input type="radio" name="decision" value="accept" />
+                        <input type="radio" name="decision" value="accepted" required />
                         Accept
                     </label>
 
                     <label class="radio-input">
-                        <input type="radio" name="decision" value="reject" />
+                        <input type="radio" name="decision" value="rejected" required />
                         Reject
                     </label>
 
 
-                    <label class="decision-label" style="padding-left: 250px;"> Allow Pdf: </label>
+                    <label class="decision-label" style="padding-left: 250px;"> Allow PDF: </label>
 
                     <label class="radio-input">
                         <input type="radio" name="allow_pdf" value="yes" />
@@ -223,7 +240,7 @@
                     </label>
 
                     <label class="radio-input">
-                        <input type="radio" name="allow_pdf" value="no" />
+                        <input type="radio" name="allow_pdf" value="no" checked />
                         No
                     </label>
                     
@@ -233,7 +250,7 @@
 
                     <label class="decision-label" style="display: block;"> Comment </label>
 
-                    <textarea class="comment" placeholder="Write your comment here...(Optional)" rows="5"></textarea>
+                    <textarea class="comment" name="comment" placeholder="Write your comment here...(Optional)" rows="5">{{ report.get_comment() if report.get_comment() }}</textarea>
                     
                 </div>
 
