@@ -4,11 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> UniScholarWorks - Submissions </title>
+    <title> UniScholarWorks - Reviews </title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css')}}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles/submissions.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/reviews.css')}}">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
@@ -34,17 +34,13 @@
                     <a href="{{ url_for('submit_report') }}"> Submit Report </a>
                 </div>
 
-                <div class="submission" style="color: white; font-weight: 600;">
+                <div class="submission">
                     <a href="{{ url_for('submissions') }}"> Submissions </a>
                 </div>
 
-                {% if user_type == 'teacher' %}
-
-                <div class="reviews">
+                <div class="reviews" style="color: white; font-weight: 600;">
                     <a href="{{ url_for('reviews') }}"> Reviews </a>
                 </div>
-
-                {% endif %}
 
             </div>
 
@@ -72,7 +68,12 @@
 
         </div>
 
-        {% if reports|length > 0 %}
+
+        {% if pending_reports|length > 0 %}
+
+        <div style="width: 100%; font-size: 18px; text-align: left; font-weight: 600; margin-top: 20px; margin-bottom: 0px; padding-left: 15px;">
+            Pending Reports:
+        </div>
 
         <table border="1">
             
@@ -85,17 +86,13 @@
             
             <tbody>
 
-                {% for report in reports %}
+                {% for report in pending_reports %}
 
                 <tr>
                     <td>
                         <div class="report-container">
                             <h4 class="report-title"> 	
-                                {% if report.get_report_status() == "Accepted" %}
                                 <a href="{{ url_for('report', report_id=report.get_report_id()) }}"> {{ report.get_title() }} </a>
-                                {% else %}
-                                <a href="#"> {{ report.get_title() }} </a>
-                                {% endif %}
                             </h4>
 
                             <div class="autors-and-date">
@@ -152,9 +149,98 @@
         </table>
 
         {% else %}
-            <div style="width: 850px; text-align: center; color: gray; margin: 0 auto; margin-top: 20px;">
+            <div style="width: 850px; text-align: center; color: gray; margin: 0 auto; margin-top:20px">
                 <i class="fas fa-exclamation-circle"></i>
-                You have no submissions.
+                You have no reports pending for review.
+            </div>
+        {% endif %}
+
+
+
+        {% if reviewed_reports|length > 0 %}
+
+        <div style="width: 100%; font-size: 18px; text-align: left; font-weight: 600; margin-top: 30px; margin-bottom: 0px; padding-left: 10px;">
+            Reviewed Reports:
+        </div>
+
+
+        <table border="1">
+            
+            <thead>
+                <tr>
+                    <th> Reports </th>
+                    <th> Status </th>
+                </tr>
+            </thead>
+            
+            <tbody>
+
+                {% for report in reviewed_reports %}
+
+                <tr>
+                    <td>
+                        <div class="report-container">
+                            <h4 class="report-title"> 	
+                                <a href="{{ url_for('report', report_id=report.get_report_id()) }}"> {{ report.get_title() }} </a>
+                            </h4>
+
+                            <div class="autors-and-date">
+                                <span class="authors"> 
+                                    {% for author in report.get_authors() %}
+                                        {{ author }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </span>
+                                <span class="date"> 
+                                    &nbsp — {{ report.get_date() }}
+                                </span>
+                            </div>
+
+                            <div class="report-summary">
+                                <div class="summary-text">
+                                    {{ report.get_summary() }}
+                                </div>
+                            </div>
+
+                            <div class="tags">
+
+                                {% for tag in report.get_tags() %}
+                                    <a class="tag" href="#"> <i class="fas fa-tag"></i> {{ tag }} </a>
+                                {% endfor %}
+
+                            </div>
+
+                            {% if report.get_comment() %}
+                                <div class="report-comment">
+                                    <span style="font-size: 15px; font-weight: 600;"> Comment: </span>
+                                    <span class="comment-text">
+                                        {{ report.get_comment() }}
+                                    </span>
+                                </div>
+                            {% endif %}
+
+                            <div class="submission-details">
+                                Submitted by: {{ report.get_submitter_id() }},  
+                                Submission Date: {{ report.get_date() }}
+                            </div>
+
+                        </div>
+
+                    </td>
+
+                    <td> {{ report.get_report_status() }} </td>
+                
+                </tr>
+
+                {% endfor %}
+                
+            </tbody>
+        
+        </table>
+
+        {% else %}
+            <div style="width: 850px; text-align: center; color: gray; margin: 0 auto; margin-top:20px">
+                <i class="fas fa-exclamation-circle"></i>
+                You have no reviewed reports.
             </div>
         {% endif %}
 

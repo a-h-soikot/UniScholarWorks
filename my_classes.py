@@ -52,6 +52,7 @@ class Report:
         self.pdf_allowed = False
         self.report_status = ""
         self.submitter_id = ""
+        self.comment = ""
     
     # Setters
     def set_title(self, title):
@@ -96,6 +97,10 @@ class Report:
 
     def set_submitter_id(self, submitter_id):
         self.submitter_id = submitter_id
+
+    def set_comment(self, comment):
+        if comment:
+            self.comment = comment
 
     # Getters
     def get_title(self):
@@ -145,3 +150,9 @@ class Report:
 
     def get_submitter_id(self):
         return self.submitter_id
+    
+    def get_comment(self):
+        if len(self.comment) < 1:
+            return None
+        
+        return self.comment

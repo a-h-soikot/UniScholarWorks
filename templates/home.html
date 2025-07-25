@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> UniScholarWorks </title>
+    <title> UniScholarWorks - Home </title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css')}}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/header.css')}}">
@@ -37,6 +37,14 @@
                 <div class="submission">
                     <a href="{{ url_for('submissions') }}"> Submissions </a>
                 </div>
+
+                {% if user_type == 'teacher' %}
+
+                <div class="reviews">
+                    <a href="{{ url_for('reviews') }}"> Reviews </a>
+                </div>
+
+                {% endif %}
 
             </div>
 

@@ -4,7 +4,7 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Report </title>
+    <title> UniScholarWorks - Report </title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Poppins:wght@500;600;700&amp;display=swap">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -37,6 +37,14 @@
                 <div class="submission">
                     <a href="#"> Submissions </a>
                 </div>
+
+                {% if user_type == 'teacher' %}
+
+                <div class="reviews">
+                    <a href="{{ url_for('reviews') }}"> Reviews </a>
+                </div>
+
+                {% endif %}
 
             </div>
 

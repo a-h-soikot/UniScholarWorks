@@ -65,13 +65,31 @@
 }
 
 
+.report-comment {
+    border: 1px solid #cac9c9;
+    border-radius: 5px;
+    padding: 5px;
+    margin-top: 5px;
+    background-color: #fefefe;
+    border-top-color: rgb(204, 204, 204);
+    border-top-style: solid;
+    border-top-width: 1.7px;
+}
+
+.report-comment .comment-text {
+    color: rgb(90, 90, 90);
+    font-size: 14px;
+    text-align: justify;
+}
+
+
 .tag {
     display: inline-flex;
     align-items: center;
     border: 1px solid #cccccc;
     border-radius: 5px;
     padding: 5px 10px;
-    margin: 5px 5px 5px 0;
+    margin: 8px 5px 5px 0;
     background-color: #fbfbfb;
     color: #4a71d0;
     font-size: 11px;
@@ -123,4 +141,5 @@ thead th {
 .submission-details {
     color: rgb(102, 102, 102);
     font-size: 14px;
+    margin-top: 5px;
 }

@@ -47,9 +47,11 @@ def login():
     user_type = request.args.get("user_type", "student")  # Default to student if not specified
     return render_template("login.html", user_type=user_type)
 
+
 @app.route("/register")
 def register():
     return render_template("registration.html")
+
 
 @app.route("/logout")
 def logout():
@@ -83,7 +85,8 @@ def home():
         selected_types=report_types,
         selected_tags=tags,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
+        user_type = session["user_type"]
     )
 
 
@@ -96,7 +99,7 @@ def search():
     query = request.args.get('q', '')
     
     if not query:
-        return redirect(url_for('home'))
+        return redirect(url_for('home'), user_type = session["user_type"])
     
     # Get filter parameters from request
     report_types = request.args.getlist('type')
@@ -120,8 +123,10 @@ def search():
         selected_types=report_types,
         selected_tags=tags,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
+        user_type = session["user_type"]
     )
+
 
 @app.route("/report/<int:report_id>")
 def report(report_id):
@@ -129,7 +134,7 @@ def report(report_id):
         return redirect(url_for("login"))
         
     report = db_queries.get_report_by_id(report_id)
-    return render_template("report.html", report=report)
+    return render_template("report.html", report=report, user_type = session["user_type"])
 
 
 
@@ -175,7 +180,9 @@ def submit_report():
             return render_template("submit_report.html", 
                                  error='Please fill in all required fields with valid information.',
                                  supervisors=supervisors,
-                                 common_tags=common_tags)
+                                 common_tags=common_tags,
+                                 user_type = session["user_type"]
+                                 )
         
         # Submit the report to database
         submission_status = db_queries.submit_new_report(
@@ -203,7 +210,9 @@ def submit_report():
     
     return render_template("submit_report.html", 
                          supervisors=supervisors,
-                         common_tags=common_tags)
+                         common_tags=common_tags,
+                         user_type = session["user_type"])
+
 
 @app.route("/submissions")
 def submissions():
@@ -212,7 +221,27 @@ def submissions():
     
     reports = db_queries.get_submitted_reports_by_user(session["user_id"])
     
-    return render_template("submissions.html", reports=reports)
+    return render_template("submissions.html", reports=reports, user_type = session["user_type"])
+
+
+@app.route("/reviews")
+def reviews():
+    if "user_id" not in session or session["user_type"] != 'teacher':
+        return redirect(url_for("login"))
+    
+    pending_reports, reviewed_reports = db_queries.get_submitted_reports_by_supervisor(session["user_id"])
+
+    return render_template("reviews.html", 
+                           pending_reports=pending_reports, 
+                           reviewed_reports=reviewed_reports)
+
+
+@app.route("/report_review")
+def report_review():
+    if "user_id" not in session or session["user_type"] != 'teacher':
+        return redirect(url_for("login"))
+        
+    return render_template("report_review.html", user_type = session["user_type"])
 
 
 @app.route("/download/<file_id>")
@@ -224,15 +253,6 @@ def download_file(file_id):
     directory = "/home/soikot/Documents/files"
         
     return send_from_directory(directory, file_id, as_attachment=True)
-
-
-@app.route("/report_review")
-def report_review():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-        
-    return render_template("report_review.html")
-
 
 
 if __name__ == "__main__":

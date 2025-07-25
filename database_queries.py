@@ -374,12 +374,13 @@ def get_common_tags():
 
 
 def get_submitted_reports_by_user(user_id):
-    
+
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""
-        SELECT * FROM reports
+        SELECT reports.report_id, title, summary, submitter_id, submission_date, comment FROM reports
+        LEFT JOIN reviews ON reports.report_id = reviews.report_id
         WHERE submitter_id = %s
         order by report_id DESC
     """, (user_id,))
@@ -396,6 +397,7 @@ def get_submitted_reports_by_user(user_id):
         report.set_summary(row['summary'])
         report.set_date(row['submission_date'])
         report.set_submitter_id(row['submitter_id'])
+        report.set_comment(row['comment'])
         
         # Get authors
         cursor.execute("""
@@ -424,7 +426,70 @@ def get_submitted_reports_by_user(user_id):
 
         reports_list.append(report)
     
+
     cursor.close()
     conn.close()
     
     return reports_list
+
+
+def get_submitted_reports_by_supervisor(supervisor_id):
+
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT reports.report_id, title, supervisor, summary, submitter_id, submission_date, comment FROM reports
+        LEFT JOIN reviews ON reports.report_id = reviews.report_id
+        WHERE supervisor = %s
+        order by report_id DESC
+    """, (supervisor_id,))
+    
+    rows = cursor.fetchall()
+
+    pending_reports_list = []
+    reviewed_reports_list = []
+
+    for row in rows:
+        report = Report()
+        
+        report.set_report_id(row['report_id'])
+        report.set_title(row['title'])
+        report.set_summary(row['summary'])
+        report.set_date(row['submission_date'])
+        report.set_submitter_id(row['submitter_id'])
+        report.set_comment(row['comment'])
+        
+        # Get authors
+        cursor.execute("""
+            SELECT name FROM students 
+            WHERE student_id IN (
+                SELECT student_id FROM report_authors 
+                WHERE report_id = %s
+            )
+        """, (row['report_id'],))
+        
+        authors = cursor.fetchall()
+        report.set_authors([author['name'] for author in authors])
+        
+        # Get tags
+        cursor.execute("SELECT tag FROM report_tag WHERE report_id = %s", (row['report_id'],))
+        tags = cursor.fetchall()
+        report.set_tags([tag['tag'] for tag in tags])
+        
+        # Get submission status
+        cursor.execute("SELECT decision FROM reviews WHERE report_id = %s", (row['report_id'],))
+        review = cursor.fetchone()
+        if review:
+            report.set_report_status(review['decision'])
+            reviewed_reports_list.append(report)
+        else:
+            report.set_report_status("pending")
+            pending_reports_list.append(report)
+
+        
+    
+    cursor.close()
+    conn.close()
+
+    return pending_reports_list, reviewed_reports_list
