@@ -35,7 +35,7 @@
                 </div>
 
                 <div class="submission">
-                    <a href="#"> Submissions </a>
+                    <a href="{{ url_for('submissions') }}"> Submissions </a>
                 </div>
 
                 {% if user_type == 'teacher' %}
@@ -73,7 +73,6 @@
         </div>
 
         <div class="container">
-
         
             <div class="div-title">
                 <img width="40" height="40" src="https://img.icons8.com/fluency/96/book--v1.png" alt="book--v1"/>
@@ -141,13 +140,19 @@
                         
                         <label class="meta-label"> Tag / Subject </label>
                         
-                        <div class="div-meta-data">
+                        {% if report.get_tags() %}
+                            <div class="div-meta-data">
 
                             {% for tag in report.get_tags() %}
                                 <a href="#"> {{ tag }}{% if not loop.last %}, {% endif %} </a>
                             {% endfor %}
                             
-                        </div>
+                            </div>
+                        {% else %}
+                            <div class="not-available">
+                                <span> No tags available </span>
+                            </div>
+                        {% endif %}
 
                     </div>
 
@@ -155,11 +160,15 @@
                         
                         <label class="meta-label"> Link </label>
                         
-                        <div class="div-meta-data">
-
-                            <a href=" {{ report.get_link() }} " target="_blank"> {{ report.get_link() }} </a>
-                            
-                        </div>
+                        {% if report.get_link() %}
+                            <div class="div-meta-data">
+                                <a href="{{ report.get_link() }}" target="_blank"> {{ report.get_link() }} </a>
+                            </div>
+                        {% else %}
+                            <div class="not-available">
+                                <span> No link available </span>
+                            </div>
+                        {% endif %}
 
                     </div>
 
@@ -179,11 +188,15 @@
                         
                         <label class="meta-label"> Description </label>
                         
-                        <div class="div-report-description">
-
-                            {{ report.get_summary() }}
-                            
-                        </div>
+                        {% if report.get_summary() %}
+                            <div class="div-report-description">
+                                {{ report.get_summary() }}
+                            </div>
+                        {% else %}
+                            <div class="not-available">
+                                <span> No description available </span>
+                            </div>
+                        {% endif %}
 
                     </div>
 

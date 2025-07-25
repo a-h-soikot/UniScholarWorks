@@ -1,5 +1,6 @@
 from flask import flash
 import mysql.connector
+from app import report
 from my_classes import Report, User
 
 # Database configuration
@@ -272,8 +273,9 @@ def get_report_by_id(report_id):
 
     cursor.execute("SELECT review_date, pdf_allowed FROM reviews WHERE report_id = %s", (report_id,))
     review = cursor.fetchone()
-    report.set_date(review['review_date'])
-    report.set_pdf_allowed(review['pdf_allowed'])
+    if review:
+        report.set_date(review['review_date'])
+        report.set_pdf_allowed(review['pdf_allowed'])
 
     report.set_file_id(row['file_id'])
 

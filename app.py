@@ -236,12 +236,13 @@ def reviews():
                            reviewed_reports=reviewed_reports)
 
 
-@app.route("/report_review")
-def report_review():
+@app.route("/report_review/<int:report_id>")
+def report_review(report_id):
     if "user_id" not in session or session["user_type"] != 'teacher':
         return redirect(url_for("login"))
         
-    return render_template("report_review.html", user_type = session["user_type"])
+    report = db_queries.get_report_by_id(report_id)
+    return render_template("report_review.html", report=report, user_type = session["user_type"])
 
 
 @app.route("/download/<file_id>")

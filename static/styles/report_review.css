@@ -10,7 +10,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    max-width: 1140px;
+    max-width: 1100px;
     width: 100%;
 }
 
@@ -78,6 +78,12 @@
     background-color: #b71c1c;
 }
 
+.download-btn.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 
 .div-right-section {
     padding-left: 20px;
@@ -85,6 +91,13 @@
     border-left-color: #aaa;
     border-left-style: solid;
     border-left-width: 1px;
+}
+
+.not-available {
+    color: gray;
+    font-style: italic;
+    padding-left: 40px;
+    font-size: 16px;
 }
 
 .meta-label {

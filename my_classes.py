@@ -77,7 +77,7 @@ class Report:
         self.link = link
 
     def set_file_id(self, file_id):
-        if self.pdf_allowed and file_id is not None:
+        if file_id is not None:
             self.file_id = file_id
 
     def set_supervisor(self, supervisor):
