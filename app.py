@@ -41,11 +41,11 @@ def login():
         else:
             # Show error message for failed login
             error = "Invalid username or password"
-            return render_template("login.html", error=error, user_type=request.form.get("user_type"))
+            return render_template("login.html", error=error)
             
     # For GET requests, just show the login form
-    user_type = request.args.get("user_type", "student")  # Default to student if not specified
-    return render_template("login.html", user_type=user_type)
+    
+    return render_template("login.html")
 
 
 @app.route("/register")
@@ -85,8 +85,7 @@ def home():
         selected_types=report_types,
         selected_tags=tags,
         start_date=start_date,
-        end_date=end_date,
-        user_type = session["user_type"]
+        end_date=end_date
     )
 
 
@@ -99,7 +98,7 @@ def search():
     query = request.args.get('q', '')
     
     if not query:
-        return redirect(url_for('home'), user_type = session["user_type"])
+        return redirect(url_for('home'))
     
     # Get filter parameters from request
     report_types = request.args.getlist('type')
@@ -123,8 +122,7 @@ def search():
         selected_types=report_types,
         selected_tags=tags,
         start_date=start_date,
-        end_date=end_date,
-        user_type = session["user_type"]
+        end_date=end_date
     )
 
 
@@ -134,7 +132,7 @@ def report(report_id):
         return redirect(url_for("login"))
         
     report = db_queries.get_report_by_id(report_id)
-    return render_template("report.html", report=report, user_type = session["user_type"])
+    return render_template("report.html", report=report)
 
 
 
@@ -180,8 +178,7 @@ def submit_report():
             return render_template("submit_report.html", 
                                  error='Please fill in all required fields with valid information.',
                                  supervisors=supervisors,
-                                 common_tags=common_tags,
-                                 user_type = session["user_type"]
+                                 common_tags=common_tags
                                  )
         
         # Submit the report to database
@@ -210,8 +207,8 @@ def submit_report():
     
     return render_template("submit_report.html", 
                          supervisors=supervisors,
-                         common_tags=common_tags,
-                         user_type = session["user_type"])
+                         common_tags=common_tags
+                         )
 
 
 @app.route("/submissions")
@@ -221,7 +218,7 @@ def submissions():
     
     reports = db_queries.get_submitted_reports_by_user(session["user_id"])
     
-    return render_template("submissions.html", reports=reports, user_type = session["user_type"])
+    return render_template("submissions.html", reports=reports)
 
 
 @app.route("/reviews")
@@ -251,7 +248,7 @@ def report_review(report_id):
         if not decision:
             flash("Please select a decision.", "error")
             report = db_queries.get_report_by_id(report_id)
-            return render_template("report_review.html", report=report, user_type=session["user_type"])
+            return render_template("report_review.html", report=report)
         
         # Submit the review
         success = db_queries.submit_report_review(
@@ -271,7 +268,7 @@ def report_review(report_id):
             flash("An error occurred while submitting the review. Please try again.", "error")
             
     report = db_queries.get_report_by_id(report_id)
-    return render_template("report_review.html", report=report, user_type=session["user_type"])
+    return render_template("report_review.html", report=report)
 
 
 @app.route("/download/<file_id>")

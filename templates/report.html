@@ -38,7 +38,7 @@
                     <a href="{{ url_for('submissions') }}"> Submissions </a>
                 </div>
 
-                {% if user_type == 'teacher' %}
+                {% if session['user_type'] == 'teacher' %}
 
                 <div class="reviews">
                     <a href="{{ url_for('reviews') }}"> Reviews </a>
