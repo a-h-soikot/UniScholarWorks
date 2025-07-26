@@ -114,10 +114,38 @@ input {
     border-radius: 8px;
     font-size: 18px;
     font-weight: 400;
-    height: 30px;
+    height: 40px;
     padding: 4px 10px;
     border-color: rgb(233, 236, 239);
     border-style: solid;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    padding: 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: rgb(75, 102, 220);
 }
 
 .login-button {

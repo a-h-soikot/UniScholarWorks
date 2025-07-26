@@ -29,3 +29,18 @@ toggleOptions.forEach(option => {
         }
     });
 });
+
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
+
+// Add event listener for password toggle
+if (togglePassword && passwordInput) {
+    togglePassword.addEventListener('click', function(e) {
+        // Toggle password visibility
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        
+        // Toggle eye icon
+        this.querySelector('i').className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+    });
+}
