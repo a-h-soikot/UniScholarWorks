@@ -66,12 +66,28 @@
                     </button>
                 </form>
 
-                <div class="div-logout-button">
-                    <a href="{{ url_for('logout') }}">
-                        <button type="submit" class="logout-button">
-                            <i class="fas fa-sign-out-alt" style="margin-right: 8px;"></i>Logout
-                        </button>
-                    </a>
+                <div class="user-profile-dropdown">
+                    
+                    <div class="user-avatar-container">
+                        <i class="fas fa-user-circle user-avatar"></i>
+                        <i class="fas fa-chevron-down dropdown-icon"></i>
+                    </div>
+                    
+                    <div class="dropdown-menu">
+                        
+                        <div class="user-info">
+                            <span class="user-name">{{ session['name'] }}</span>
+                            <span class="user-role">{{ session['user_type']|capitalize }}</span>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+                        <a href="{{ url_for('logout') }}" class="logout-button">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span> Logout </span>
+                        </a>
+
+                    </div>
+                    
                 </div>
                 
             </div>   
