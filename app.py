@@ -34,6 +34,9 @@ def login():
             session["email"] = user.get_email()
             session["name"] = user.get_name()
             session["user_type"] = request.form.get("user_type")
+
+            if session["user_type"] == 'teacher':
+                session["pending_reviews"] = db_queries.get_pending_review_count(session["user_id"])
             
             session.permanent = True
             # Redirect to home page after successful login
@@ -228,6 +231,9 @@ def reviews():
     
     pending_reports, reviewed_reports = db_queries.get_submitted_reports_by_supervisor(session["user_id"])
 
+    if session.get('pending_reviews') and session["pending_reviews"] > 0:
+        session["pending_reviews"] = 0
+                    
     return render_template("reviews.html", 
                            pending_reports=pending_reports, 
                            reviewed_reports=reviewed_reports)

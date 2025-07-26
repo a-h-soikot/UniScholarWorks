@@ -543,3 +543,22 @@ def submit_report_review(report_id, reviewer_id, decision, pdf_allowed, comment=
     finally:
         cursor.close()
         conn.close()
+
+
+def get_pending_review_count(teacher_id):
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT reports.report_id, supervisor, COUNT(*) as count 
+        FROM reports LEFT JOIN reviews on reports.report_id = reviews.report_id
+        WHERE reviews.decision IS NULL AND reports.supervisor = %s
+        GROUP BY reports.report_id, supervisor
+    """, (teacher_id,)) 
+    
+    result = cursor.fetchone()
+    
+    cursor.close()
+    conn.close()
+    
+    return result['count'] if result else 0

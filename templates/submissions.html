@@ -41,7 +41,13 @@
                 {% if session['user_type'] == 'teacher' %}
 
                 <div class="reviews">
+                    
                     <a href="{{ url_for('reviews') }}"> Reviews </a>
+
+                    {% if session.get('pending_reviews') and session["pending_reviews"] > 0 %}
+                        <div class="notification-count"> {{ session["pending_reviews"] }} </div>
+                    {% endif %}
+
                 </div>
 
                 {% endif %}
