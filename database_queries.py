@@ -550,10 +550,9 @@ def get_pending_review_count(teacher_id):
     cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""
-        SELECT reports.report_id, supervisor, COUNT(*) as count 
+        SELECT COUNT(reports.report_id) as count 
         FROM reports LEFT JOIN reviews on reports.report_id = reviews.report_id
         WHERE reviews.decision IS NULL AND reports.supervisor = %s
-        GROUP BY reports.report_id, supervisor
     """, (teacher_id,)) 
     
     result = cursor.fetchone()

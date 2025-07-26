@@ -44,7 +44,7 @@ def login():
         else:
             # Show error message for failed login
             error = "Invalid username or password"
-            return render_template("login.html", error=error)
+            return render_template("login.html", error=error, user_type=request.form.get("user_type"))
             
     # For GET requests, just show the login form
     

@@ -104,7 +104,7 @@
                         </a>
 
                     </div>
-                    
+
                 </div>
                 
             </div>   
@@ -304,7 +304,11 @@
 
                             <div class="report-summary">
                                 <div class="summary-text">
-                                    {{ report.get_summary() }}
+                                    {% if report.get_summary() %}
+                                        {{ report.get_summary() }}
+                                    {% else %}
+                                        <span style="color: gray; font-style: italic; font-size: 14px;"> No summary available. </span>
+                                    {% endif %}
                                 </div>
                             </div>
 
