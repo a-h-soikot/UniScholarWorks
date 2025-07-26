@@ -1,6 +1,8 @@
 from flask import flash
 import mysql.connector
-from app import report
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
+
 from my_classes import Report, User
 
 # Database configuration
@@ -13,40 +15,45 @@ db_config = {
 
 
 def get_user_by_credentials(user_id, password, user_type):
- 
+    
+    #print(PasswordHasher().hash(password))
+    
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
-    
-    #hashed_password = hashlib.sha256(password.encode()).hexdigest()
 
     query = """
     SELECT * FROM students
-    WHERE (student_id = %s OR email = %s) AND password = %s
+    WHERE (student_id = %s OR email = %s)
     """
 
     if user_type == "teacher":
         query = """
         SELECT * FROM teachers
-        WHERE (teacher_id = %s OR email = %s) AND password = %s
+        WHERE (teacher_id = %s OR email = %s)
         """
-    cursor.execute(query, (user_id, user_id, password))
+    cursor.execute(query, (user_id, user_id))
     
     user_data = cursor.fetchone()
     cursor.close()
     conn.close()
     
-    if user_data:
-        user = User()
-        user.set_user_id(user_data['student_id'] if user_type == "student" else user_data['teacher_id'])
-        user.set_email(user_data['email'])
-        user.set_name(user_data['name'])
-        
-        return user
+    try:
+        if user_data and PasswordHasher().verify(user_data['password'], password):
+            user = User()
+            user.set_user_id(user_data['student_id'] if user_type == "student" else user_data['teacher_id'])
+            user.set_email(user_data['email'])
+            user.set_name(user_data['name'])
+            
+            return user
+    
+    except VerifyMismatchError:
+        return None
     
     return None
 
 
 def get_filtered_reports(report_types=None, tags=None, start_date=None, end_date=None):
+    
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
     
@@ -511,6 +518,21 @@ def submit_report_review(report_id, reviewer_id, decision, pdf_allowed, comment=
             VALUES (%s, %s, %s, %s, %s)
             """, (report_id, reviewer_id, decision, pdf_allowed, comment))
         
+        if decision == "rejected":
+            # If the report is rejected or PDF is not allowed, update the report status
+            cursor.execute("""
+                UPDATE reports 
+                SET file_id = '', link = ''
+                WHERE report_id = %s
+            """, (report_id,))
+        
+        elif pdf_allowed == 'no':
+            cursor.execute("""
+                UPDATE reports 
+                SET file_id = ''
+                WHERE report_id = %s
+            """, (report_id,))
+
         conn.commit()
         return True
         

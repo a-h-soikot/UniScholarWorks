@@ -177,3 +177,20 @@ class Report:
             return None
         
         return self.comment
+    
+    # -----------------------------------------------
+
+    def delete_pdf(self):
+        if self.file_id is None or self.file_id == "":
+            return None
+        directory = "/home/soikot/Documents/files"
+        file_path = os.path.join(directory, self.file_id)
+        if not os.path.exists(file_path):
+            return None
+        try:
+            os.remove(file_path)
+            self.file_id = ""
+
+        except Exception as e:
+            print(f"Error deleting file: {e}")
+            return None

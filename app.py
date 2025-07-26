@@ -264,6 +264,8 @@ def report_review(report_id):
         
         if success:
             flash("Review submitted successfully!", "success")
+            if decision == 'rejected' or allow_pdf == 'no':
+                report.delete_pdf()
             return redirect(url_for("reviews"))
         else:
             flash("An error occurred while submitting the review. Please try again.", "error")
