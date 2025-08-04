@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UniScholarWorks - Home </title>
@@ -12,23 +13,6 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const avatarContainer = document.querySelector('.user-avatar-container');
-            const dropdownMenu = document.querySelector('.dropdown-menu');
-            
-            // For touch devices, toggle dropdown on click
-            avatarContainer.addEventListener('click', function(e) {
-                e.stopPropagation();
-                dropdownMenu.classList.toggle('show-dropdown');
-            });
-            
-            // Close dropdown when clicking outside
-            document.addEventListener('click', function() {
-                dropdownMenu.classList.remove('show-dropdown');
-            });
-        });
-    </script>
 
 </head>
 
