@@ -11,9 +11,12 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/login.css')}}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/particles.css')}}">
     
     <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
     <script src="{{ url_for('static', filename='scripts/login.js') }}" defer></script>
+    <script src="http://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js" defer></script>
+    <script src="{{ url_for('static', filename='scripts/particles_conf.js') }}" defer></script>
 
 </head>
 
@@ -93,6 +96,8 @@
         -->
 
     </div>
+
+    <div id="particles-js"></div> 
     
 </body>
 
