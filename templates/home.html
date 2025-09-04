@@ -186,10 +186,18 @@
 
                         <li class="list-item">
                             <label>
+                                <input type="checkbox" name="tag" value="AI" {% if 'AI' in selected_tags %}checked{% endif %}>
+                                AI
+                            </label>
+                        </li>
+                        
+                        <li class="list-item">
+                            <label>
                                 <input type="checkbox" name="tag" value="Machine Learning" {% if 'Machine Learning' in selected_tags %}checked{% endif %}>
                                 Machine Learning
                             </label>
                         </li>
+
 
                         <li class="list-item">
                             <label>
@@ -212,12 +220,6 @@
                             </label>
                         </li>
 
-                        <li class="list-item">
-                            <label>
-                                <input type="checkbox" name="tag" value="Chemistry" {% if 'Chemistry' in selected_tags %}checked{% endif %}>
-                                Chemistry
-                            </label>
-                        </li>
 
                         <li class="list-item">
                             <label>
