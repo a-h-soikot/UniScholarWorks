@@ -184,3 +184,33 @@ td {
     border: 1px solid #aaa;
     padding: 10px;
 }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    gap: 5px;
+}
+
+.pagination-button {
+    background-color: rgb(68, 110, 155);
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.pagination-button:hover {
+    background-color: rgb(52, 85, 120);
+}
+
+.current-page {
+    align-self: center;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(102, 102, 102);
+}

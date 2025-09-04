@@ -52,97 +52,13 @@ def get_user_by_credentials(user_id, password, user_type):
     return None
 
 
-def get_filtered_reports(report_types=None, tags=None, start_date=None, end_date=None):
-    
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor(dictionary=True)
-    
-    # Base query
-    query = """
-    SELECT DISTINCT reports.report_id, title, summary, review_date 
-    FROM reports 
-    INNER JOIN reviews ON reports.report_id = reviews.report_id
-    """
-    
-    conditions = ["reviews.decision = 'accepted'"]
-    params = []
-    
-    # Add type filter
-    if report_types and len(report_types) > 0:
-        type_placeholders = ', '.join(['%s'] * len(report_types))
-        conditions.append(f"reports.type IN ({type_placeholders})")
-        params.extend(report_types)
-    
-    # Add tag filter
-    if tags and len(tags) > 0:
-        query += " INNER JOIN report_tag ON reports.report_id = report_tag.report_id"
-        tag_placeholders = ', '.join(['%s'] * len(tags))
-        conditions.append(f"report_tag.tag IN ({tag_placeholders})")
-        params.extend(tags)
-    
-    # Add date filters
-    if start_date:
-        conditions.append("DATE(reviews.review_date) >= %s")
-        params.append(start_date)
-    
-    if end_date:
-        conditions.append("DATE(reviews.review_date) <= %s")
-        params.append(end_date)
-    
-    # Add all conditions to the query
-    if conditions:
-        query += " WHERE " + " AND ".join(conditions)
-    
-    # Add ordering
-    query += " ORDER BY review_date DESC"
-    
-    # Execute the query
-    cursor.execute(query, params)
-    rows = cursor.fetchall()
-    
-    reports_list = []
-    
-    for row in rows:
-        report = Report()
-        
-        report.set_report_id(row['report_id'])
-        report.set_title(row['title'])
-        report.set_summary(row['summary'])
-        report.set_date(row['review_date'])
-        
-        # Get authors
-        cursor.execute("""
-            SELECT name FROM students 
-            WHERE student_id IN (
-                SELECT student_id FROM report_authors 
-                WHERE report_id = %s
-            )
-        """, (row['report_id'],))
-        
-        authors = cursor.fetchall()
-        report.set_authors([author['name'] for author in authors])
-        
-        # Get tags
-        cursor.execute("SELECT tag FROM report_tag WHERE report_id = %s", (row['report_id'],))
-        tags = cursor.fetchall()
-        report.set_tags([tag['tag'] for tag in tags])
-        
-        reports_list.append(report)
-    
-    cursor.close()
-    conn.close()
-    
-    return reports_list
-
-
-def get_reports():
-    return get_filtered_reports()
-
-def search_reports(query, report_types=None, tags=None, start_date=None, end_date=None):
+def search_reports(query, page, per_page, report_types=None, tags=None, start_date=None, end_date=None):
 
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
     
+    offset = (page - 1) * per_page
+
     # Base query
     query_sql = """
     SELECT DISTINCT reports.report_id, title, summary, review_date 
@@ -203,6 +119,9 @@ def search_reports(query, report_types=None, tags=None, start_date=None, end_dat
     
     # Add ordering
     query_sql += " ORDER BY review_date DESC"
+    
+    query_sql += " LIMIT %s OFFSET %s"
+    params.extend([per_page, offset])
     
     # Execute the query
     cursor.execute(query_sql, params)

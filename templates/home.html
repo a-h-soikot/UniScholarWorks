@@ -57,8 +57,25 @@
 
             <div class="right-section">
 
-                <form method="get" action="{{ url_for('search') }}" class="search-form">
+                <form method="get" action="{{ url_for('home') }}" class="search-form">
                     <input class="search-bar" type="text" name="q" placeholder="Search" id="search-bar" value="{{ query if query }}">
+                    
+                    {% for t in selected_types %}
+                        <input type="hidden" name="type" value="{{ t }}">
+                    {% endfor %}
+                    
+                    {% for tag in selected_tags %}
+                        <input type="hidden" name="tag" value="{{ tag }}">
+                    {% endfor %}
+
+                    {% if start_date %}
+                        <input type="hidden" name="start_date" value="{{ start_date }}">
+                    {% endif %}
+
+                    {% if end_date %}
+                        <input type="hidden" name="end_date" value="{{ end_date }}">
+                    {% endif %}
+                    
                     <button type="submit" class="search-button"> 
                         <i class="fas fa-search"></i>
                         <div class="tooltip">
@@ -231,6 +248,8 @@
                         </li>
 
                     </ul>
+
+                    <input type="hidden" name="q" value="{{ query if query }}">
                     
                     <div class="filter-button-container">
                         <button type="submit" class="apply-filter-button">
@@ -311,6 +330,22 @@
                     {% endfor %}
 
                 </table>
+
+                <div class="pagination">
+
+                    {% if page > 1 %}
+                        <a href="{{ url_for('home', q=query, type=selected_types, tag=selected_tags, start_date=start_date, end_date=end_date, page=page-1) }}" class="pagination-button" style="margin-right: 20px;">
+                            <i class="fas fa-chevron-left"></i> Previous
+                        </a>
+                    {% endif %}
+
+                    <span class="current-page"> Page {{ page }} </span>
+
+                    {% if reports|length == per_page %}
+                        <a href="{{ url_for('home', q=query, type=selected_types, tag=selected_tags, start_date=start_date, end_date=end_date, page=page+1) }}" class="pagination-button" style="margin-left: 20px;">
+                            Next <i class="fas fa-chevron-right"></i>
+                        </a>
+                    {% endif %}
 
             </div>
 

@@ -68,40 +68,12 @@ def home():
     if "user_id" not in session:
         return redirect(url_for("login"))
     
-    # Get filter parameters from request
-    report_types = request.args.getlist('type')
-    tags = request.args.getlist('tag')
-    start_date = request.args.get('start_date')
-    end_date = request.args.get('end_date')
-    
-    # Get reports with filters
-    reports = db_queries.get_filtered_reports(
-        report_types=report_types, 
-        tags=tags,
-        start_date=start_date,
-        end_date=end_date
-    )
-    
-    # Pass both reports and filter selections back to the template
-    return render_template("home.html", 
-        reports=reports,
-        selected_types=report_types,
-        selected_tags=tags,
-        start_date=start_date,
-        end_date=end_date
-    )
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
 
-
-@app.route("/search", methods=["GET"])
-def search():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
-    
     # Get search query
     query = request.args.get('q', '')
-    
-    if not query:
-        return redirect(url_for('home'))
+    print(f"Search query: {query}")
     
     # Get filter parameters from request
     report_types = request.args.getlist('type')
@@ -112,6 +84,8 @@ def search():
     # Search reports with query and filters
     reports = db_queries.search_reports(
         query=query,
+        page=page,
+        per_page=per_page,
         report_types=report_types, 
         tags=tags,
         start_date=start_date,
@@ -125,7 +99,9 @@ def search():
         selected_types=report_types,
         selected_tags=tags,
         start_date=start_date,
-        end_date=end_date
+        end_date=end_date,
+        page=page,
+        per_page=per_page
     )
 
 
