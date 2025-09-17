@@ -46,7 +46,7 @@ def login():
             error = "Invalid username or password"
             return render_template("login.html", error=error, user_type=request.form.get("user_type"))
             
-    # For GET requests, just show the login form
+    # For GET requests, show the login form
     
     return render_template("login.html")
 
@@ -73,7 +73,6 @@ def home():
 
     # Get search query
     query = request.args.get('q', '')
-    print(f"Search query: {query}")
     
     # Get filter parameters from request
     report_types = request.args.getlist('type')
@@ -128,15 +127,15 @@ def submit_report():
         report_link = request.form.get('report_link')
         supervisor = request.form.get('supervisor_id')
         
-        # Get authors (may be multiple)
+        # Get authors
         authors = request.form.getlist('authors[]')
         
-        # Get tags (split by comma)
+        # Get tags 
         tags_input = request.form.get('tags')
         tags = tags_input.split(',') if tags_input else []
         tags = [tag.strip() for tag in tags if tag.strip()]
         
-        # Handle file upload
+        # File upload
         file_id = None
         if 'pdf_file' in request.files and request.files['pdf_file'].filename:
             pdf_file = request.files['pdf_file']
@@ -149,9 +148,7 @@ def submit_report():
             file_path = os.path.join(upload_folder, file_id)
             pdf_file.save(file_path)
         
-        # Validate required fields
         if not title or not report_type or not authors or not supervisor:
-            # Get supervisors and common tags for the form
             supervisors = db_queries.get_all_supervisors()
             common_tags = db_queries.get_common_tags()
             return render_template("submit_report.html", 

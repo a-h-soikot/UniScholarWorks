@@ -16,8 +16,6 @@ db_config = {
 
 def get_user_by_credentials(user_id, password, user_type):
     
-    #print(PasswordHasher().hash(password))
-    
     conn = mysql.connector.connect(**db_config)
     cursor = conn.cursor(dictionary=True)
 
@@ -122,8 +120,7 @@ def search_reports(query, page, per_page, report_types=None, tags=None, start_da
     
     query_sql += " LIMIT %s OFFSET %s"
     params.extend([per_page, offset])
-    
-    # Execute the query
+
     cursor.execute(query_sql, params)
     rows = cursor.fetchall()
     
@@ -154,7 +151,7 @@ def search_reports(query, page, per_page, report_types=None, tags=None, start_da
         tags = cursor.fetchall()
         report.set_tags([tag['tag'] for tag in tags])
         
-        # Additional report details if needed
+        # Report type
         cursor.execute("SELECT type FROM reports WHERE report_id = %s", (row['report_id'],))
         report_type = cursor.fetchone()
         if report_type:
@@ -229,14 +226,11 @@ def submit_new_report(title, report_type, authors, supervisor, summary=None, lin
         report_id = cursor.lastrowid
         
         # Insert authors
-        # First, find student_ids for the authors
         for author_id in authors:
-            # Try to find the student by ID
             cursor.execute("SELECT student_id FROM students WHERE student_id = %s", (author_id,))
             result = cursor.fetchone()
             
             if result:
-                # Student exists
                 student_id = result[0]
             else:
                 flash(f"Student/Author with ID '{author_id}' not found in the database.", 'error')
@@ -438,7 +432,6 @@ def submit_report_review(report_id, reviewer_id, decision, pdf_allowed, comment=
             """, (report_id, reviewer_id, decision, pdf_allowed, comment))
         
         if decision == "rejected":
-            # If the report is rejected or PDF is not allowed, update the report status
             cursor.execute("""
                 UPDATE reports 
                 SET file_id = '', link = ''
