@@ -3,7 +3,7 @@
     width: 100%;
 
     background-color: white;
-    padding: 40px 80px;
+    padding: 30px 60px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
@@ -25,7 +25,7 @@ h2 {
     width: 70px;
     border-radius: 3px;
     margin: 0 auto;
-    margin-bottom: 50px;
+    margin-bottom: 30px;
     
 }
 
@@ -71,7 +71,7 @@ input {
 
 .bottom-label {
     text-align: center;
-    margin-top: 50px;
+    margin-top: 25px;
     font-weight: 500;
 }
 
