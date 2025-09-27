@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, session, request, flash, send_from_directory, abort
 import os
 import database_queries as db_queries
+import my_utilities
 
 from datetime import timedelta
 from livereload import Server
@@ -140,13 +141,7 @@ def submit_report():
         if 'pdf_file' in request.files and request.files['pdf_file'].filename:
             pdf_file = request.files['pdf_file']
  
-            import uuid
-            file_id = f"{uuid.uuid4()}.pdf"
-
-            upload_folder = "/home/soikot/Documents/files"
-
-            file_path = os.path.join(upload_folder, file_id)
-            pdf_file.save(file_path)
+            file_id = my_utilities.add_watermark_and_save(pdf_file)
         
         if not title or not report_type or not authors or not supervisor:
             supervisors = db_queries.get_all_supervisors()
@@ -155,7 +150,7 @@ def submit_report():
                                  error='Please fill in all required fields with valid information.',
                                  supervisors=supervisors,
                                  common_tags=common_tags
-                                 )
+                                )
         
         # Submit the report to database
         submission_status = db_queries.submit_new_report(
