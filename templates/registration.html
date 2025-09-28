@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> UniScholarWorks - Registration </title>
@@ -11,6 +12,8 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/registration.css')}}">
+    <script src="{{ url_for('static', filename='scripts/general.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='scripts/registration.js') }}" defer></script>
 
 </head>
 
@@ -22,13 +25,57 @@
     
         <div class="underline"> </div>
     
-        <form method="post">
+                <div class="flash-messages" style="margin-bottom: 15px;">
+                        {% with messages = get_flashed_messages(with_categories=true) %}
+                            {% if messages %}
+                                {% for category, message in messages %}
+                                    <div class="flash-message {{ category }}">
+                                        <div class="message-content">
+                                            <i class="fas {% if category == 'success' %}fa-check-circle{% elif category == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                                            {{ message }}
+                                        </div>
+                                        <span class="flash-close">&times;</span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endwith %}
+                </div>
+
+        
+        <form method="post" action="{{ url_for('register') }}">
     
             <div class="form-group">
                 <label for="email">
                     <i class="fas fa-envelope" style="margin-right: 8px;"></i>Email
                 </label>
-                <input type="email" id="email" name="email" placeholder="exampe@student.nstu.edu.bd" required>
+                <input type="email" id="email" name="email" placeholder="example@student.nstu.edu.bd" required>
+                <small id="email-feedback" class="helper-text"></small>
+            </div>
+
+            <div class="otp-controls">
+                <button type="button" id="request-otp" class="secondary-button">Get OTP</button>
+                <div id="otp-status" class="otp-status" aria-live="polite"></div>
+            </div>
+
+            <div class="form-group otp-input-group" id="otp-input-wrapper" hidden>
+                <label for="otp">
+                    <i class="fas fa-key" style="margin-right: 8px;"></i>OTP
+                </label>
+                <div class="otp-row">
+                    <input type="text" id="otp" name="otp" placeholder="Enter 6-digit OTP" maxlength="6" inputmode="numeric">
+                    <button type="button" id="verify-otp" class="secondary-button">Verify OTP</button>
+                </div>
+                <small id="otp-feedback" class="helper-text"></small>
+            </div>
+
+
+
+            <div class="form-group">
+                <label for="student_id">
+                    <i class="fas fa-id-card" style="margin-right: 8px;"></i>Student ID
+                </label>
+                <input type="text" id="student_id" name="student_id" placeholder="Enter your student ID" required>
+                <small id="student-id-feedback" class="helper-text"></small>
             </div>
 
             <div class="form-group">
@@ -43,7 +90,16 @@
                 <label for="password">
                     <i class="fas fa-lock" style="margin-right: 8px;"></i>Password
                 </label>
-                <input type="password" id="password" name="password" placeholder="Enter a password" required>
+
+                <div class="password-container">
+                    <input type="password" id="password" name="password" placeholder="Enter a password" required>
+
+                    <button type="button" id="togglePassword" class="toggle-password">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+
+                <small id="password-feedback" class="helper-text"></small>
             </div>
     
             <div class="form-group">
@@ -51,13 +107,15 @@
                     <i class="fas fa-lock" style="margin-right: 8px;"></i>Confirm Password
                 </label>
                 <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                <small id="confirm-password-feedback" class="helper-text"></small>
             </div>
     
-            <button type="submit" class="registration-button">
+            <button type="submit" class="registration-button" id="register" disabled>
                 <i class="fas fa-user-plus" style="margin-right: 8px;"></i>Register
             </button>
     
         </form>
+
     
         <label class="bottom-label">
             Already have an account?

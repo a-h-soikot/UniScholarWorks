@@ -34,7 +34,7 @@ span {
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     display: flex;
     flex-direction: column;
 }
@@ -77,4 +77,108 @@ input {
 
 a {
     text-decoration: none;
+}
+
+.helper-text {
+    display: block;
+    margin-top: 6px;
+    font-size: 14px;
+    color: #d9534f;
+   
+}
+
+.otp-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.otp-status {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.otp-input-group {
+    transition: opacity 0.2s ease;
+}
+
+.otp-row {
+    display: flex;
+    gap: 12px;
+}
+
+.secondary-button {
+    padding: 10px 16px;
+    background-color: #4b66dc;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.secondary-button:disabled {
+    background-color: #a9b4f3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.secondary-button:hover:not(:disabled) {
+    background-color: #3b54c2;
+    transform: translateY(-1px);
+}
+
+.secondary-button.success {
+    background-color: #1f9d5c;
+    box-shadow: 0 4px 12px rgba(31, 157, 92, 0.35);
+}
+
+.registration-button:disabled {
+    background-color: #aab8ff;
+    cursor: not-allowed;
+}
+
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-container input {
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    padding: 0;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: rgb(75, 102, 220);
+}
+
+.success-text {
+    color: #1f9d5c;
+}
+
+.info-text {
+    color: #556d91;
+}
+
+.error-text {
+    color: #d9534f;
 }

@@ -69,8 +69,6 @@ h2 {
     
 }
 
-
-
 .toggle-option:not(.active):hover {
     background-color: #e9ecef;
 }

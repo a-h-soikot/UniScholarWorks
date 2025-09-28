@@ -1,10 +1,14 @@
-from flask import Flask, redirect, url_for, render_template, session, request, flash, send_from_directory, abort
+from flask import Flask, redirect, url_for, render_template, session, request, flash, send_from_directory, abort, jsonify
 import os
+import secrets
+import string
+from dotenv import load_dotenv
+from datetime import datetime, timedelta
+from livereload import Server
 import database_queries as db_queries
 import my_utilities
 
-from datetime import timedelta
-from livereload import Server
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)  # Use a secure random key for session management
@@ -14,6 +18,8 @@ app.config['SESSION_PERMANENT'] = True   # Make sessions permanent by default
 app.config['PRESERVE_CONTEXT_ON_EXCEPTION'] = True  # Preserve context (including flash messages) on exceptions
 
 
+OTP_SESSION_KEY = "registration_otp"
+OTP_EXPIRY_MINUTES = 5
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -52,8 +58,124 @@ def login():
     return render_template("login.html")
 
 
-@app.route("/register")
+@app.route("/send_otp", methods=["POST"])
+def send_otp():
+    payload = request.get_json(silent=True) or {}
+    email = (payload.get('email') or '').strip()
+
+    if not email:
+        return jsonify(success=False, message="Email is required."), 400
+
+    if not email.lower().endswith('@student.nstu.edu.bd'):
+        return jsonify(success=False, message="Only @student.nstu.edu.bd email addresses are allowed."), 400
+
+    otp = ''.join(secrets.choice(string.digits) for _ in range(6))
+
+    session[OTP_SESSION_KEY] = {
+        'email': email,
+        'otp': otp,
+        'expires_at': (datetime.utcnow() + timedelta(minutes=OTP_EXPIRY_MINUTES)).isoformat()
+    }
+    session['otp_verified'] = False
+
+    try:
+        my_utilities.send_otp_email(email, otp)
+    except Exception as exc:  # noqa: F841
+        app.logger.exception("Failed to send OTP email")
+        return jsonify(success=False, message="Unable to send OTP. Please contact support."), 500
+
+    return jsonify(success=True, message="OTP sent successfully.")
+
+
+@app.route("/verify_otp", methods=["POST"])
+def verify_otp():
+    payload = request.get_json(silent=True) or {}
+    email = (payload.get('email') or '').strip()
+    otp = (payload.get('otp') or '').strip()
+
+    stored = session.get(OTP_SESSION_KEY)
+    if not stored:
+        return jsonify(success=False, message="No OTP request found. Please request a new OTP."), 400
+
+    if stored.get('email', '').lower() != email.lower():
+        return jsonify(success=False, message="Email mismatch. Request a new OTP for this email."), 400
+
+    expires_at = stored.get('expires_at')
+    if not expires_at or datetime.utcnow() > datetime.fromisoformat(expires_at):
+        session.pop(OTP_SESSION_KEY, None)
+        return jsonify(success=False, message="OTP has expired. Please request a new one."), 400
+
+    if stored.get('otp') != otp:
+        return jsonify(success=False, message="Invalid OTP. Please try again."), 400
+
+    session['otp_verified'] = True
+    session['verified_email'] = email
+    session.pop(OTP_SESSION_KEY, None)
+
+    return jsonify(success=True, message="OTP verified successfully.")
+
+
+@app.route("/check_availability", methods=["POST"])
+def check_availability():
+    payload = request.get_json(silent=True) or {}
+    field = (payload.get('field') or '').strip().lower()
+    value = (payload.get('value') or '').strip()
+
+    if field not in {"email", "student_id"} or not value:
+        return jsonify(success=False, message="Invalid request."), 400
+
+    try:
+        if field == "email":
+            exists = db_queries.is_email_registered(value)
+        else:
+            exists = db_queries.is_id_registered(value)
+    except Exception as exc:  # noqa: F841
+        app.logger.exception("Availability check failed")
+        return jsonify(success=False, message="Unable to check availability right now."), 500
+
+    return jsonify(success=True, exists=exists)
+
+
+@app.route("/register", methods=["GET", "POST"])
 def register():
+    if request.method == "POST":
+        email = (request.form.get("email") or '').strip()
+        if not session.get('otp_verified') or email.lower() != (session.get('verified_email') or '').lower():
+            flash('Please verify the OTP sent to your institutional email before registering.', 'error')
+            return redirect(url_for('register'))
+
+        password = request.form.get("password", "")
+        confirm_password = request.form.get("confirm_password", "")
+
+        if len(password) < 8 or password.isalpha() or password.isnumeric():
+            flash('Password must be at least 8 characters and include both letters and numbers.', 'error')
+            return redirect(url_for('register'))
+
+        if password != confirm_password:
+            flash('Passwords do not match.', 'error')
+            return redirect(url_for('register'))
+
+        student_id = request.form.get("student_id", "").strip()
+        if len(student_id) != 11:
+            flash('Student ID must be of 11-digit.', 'error')
+            return redirect(url_for('register'))
+        
+        name = request.form.get("name", "").strip()
+        if not name:
+            flash('Name is required.', 'error')
+            return redirect(url_for('register'))
+        
+        status = db_queries.register_student(student_id, name, email, password)
+        if status:
+            flash('Registration successful! You can now log in.', 'success')
+            my_utilities.send_welcome_email(email, name)
+
+        else:
+            flash('Registration failed. Please try again.', 'error')
+
+        session['otp_verified'] = False
+        session.pop('verified_email', None)
+
     return render_template("registration.html")
 
 

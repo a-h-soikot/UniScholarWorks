@@ -1,0 +1,6 @@
+# Environment and credentials
+.env
+
+# Python cache and virtual environments
+#__pycache__/
+#venv/

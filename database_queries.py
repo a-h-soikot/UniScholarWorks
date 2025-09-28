@@ -473,3 +473,67 @@ def get_pending_review_count(teacher_id):
     conn.close()
     
     return result['count'] if result else 0
+
+
+
+def register_student(student_id, name, email, password):
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+    
+    try:
+        hashed_password = PasswordHasher().hash(password)
+        
+        cursor.execute("""
+            INSERT INTO students (student_id, name, email, password)
+            VALUES (%s, %s, %s, %s)
+        """, (student_id, name, email, hashed_password))
+        
+        conn.commit()
+        return True
+        
+    except mysql.connector.IntegrityError as e:
+        conn.rollback()
+        flash(f"Error registering student: {str(e)}", 'error')
+        return False
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def is_email_registered(email):
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT 1 FROM students WHERE LOWER(email) = LOWER(%s) LIMIT 1", (email,))
+        exists = cursor.fetchone() is not None
+
+        if not exists:
+            cursor.execute("SELECT 1 FROM teachers WHERE LOWER(email) = LOWER(%s) LIMIT 1", (email,))
+            exists = cursor.fetchone() is not None
+
+        return exists
+    
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def is_id_registered(_id):
+    conn = mysql.connector.connect(**db_config)
+    cursor = conn.cursor()
+
+    try:
+        cursor.execute("SELECT 1 FROM students WHERE student_id = %s LIMIT 1", (_id,))
+        exists = cursor.fetchone() is not None
+
+        if not exists:
+            cursor.execute("SELECT 1 FROM teachers WHERE teacher_id = %s LIMIT 1", (_id,))
+            exists = cursor.fetchone() is not None
+
+        return exists
+    
+    finally:
+        cursor.close()
+        conn.close()
