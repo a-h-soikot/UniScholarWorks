@@ -31,7 +31,7 @@ let lastEmailAvailability = null;
 let lastStudentIdAvailability = null;
 
 const EMAIL_DOMAIN_REGEX = /^[^@\s]+@student\.nstu\.edu\.bd$/i;
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*?&#^()_+\-=]{8,}$/;
+const PASSWORD_REGEX = /^(?=.*\d)(?=.*\D).{8,}$/;
 const STUDENT_ID_REGEX = /^[A-Z]{3}\d{7}[MF]$/;
 
 const setHelperText = (element, message = '', type = 'info') => {
@@ -205,6 +205,25 @@ const startResendCooldown = () => {
     }, 1000);
 };
 
+const startVerifyCooldown = () => {
+    if (!document.getElementById('verify-otp')) return;
+
+    let remaining = 5;
+    verifyOtpBtn.disabled = true;
+    verifyOtpBtn.textContent = `Retry in ${remaining}s`;
+
+    const verifyTimer = setInterval(() => {
+        remaining -= 1;
+        if (remaining <= 0) {
+            clearInterval(verifyTimer);
+            verifyOtpBtn.disabled = false;
+            verifyOtpBtn.textContent = 'Verify OTP';
+        } else {
+            verifyOtpBtn.textContent = `Retry in ${remaining}s`;
+        }
+    }, 1000);
+};
+
 const validateEmail = () => {
     const email = emailInput.value.trim();
     if (!email) {
@@ -227,7 +246,7 @@ const validatePasswordStrength = () => {
         return;
     }
     if (!PASSWORD_REGEX.test(value)) {
-        setHelperText(passwordFeedback, 'Minimum 8 characters with letters and numbers.', 'error');
+        setHelperText(passwordFeedback, 'Use at least 8 characters and at least one number.', 'error');
         passwordValid = false;
     } else {
         passwordFeedback.textContent = '';
@@ -309,6 +328,11 @@ requestOtpBtn.addEventListener('click', async () => {
         return;
     }
 
+    const available = await handleEmailAvailability();
+    if (!available) {
+        return;
+    }
+
     setHelperText(otpFeedback, '');
     setHelperText(otpStatus, 'Sending OTP...', 'info');
     otpWrapper.hidden = false;
@@ -366,16 +390,8 @@ verifyOtpBtn.addEventListener('click', async () => {
         const data = await response.json();
 
         if (!response.ok) {
-            
-            verifyOtpBtn.disabled = true;
- 
-            // re-enable after 2 seconds
-             setTimeout(() => {
-                 verifyOtpBtn.disabled = false;
-             }, 2000);
-
+            startVerifyCooldown();
             throw new Error(data.message || 'OTP verification failed');
-
         }
 
         otpVerified = true;
@@ -395,7 +411,6 @@ verifyOtpBtn.addEventListener('click', async () => {
 
         otpFeedback.textContent = '';
     } catch (error) {
-        verifyOtpBtn.disabled = false;
         setHelperText(otpFeedback, error.message || 'Invalid OTP. Please try again.', 'error');
     }
 });

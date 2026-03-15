@@ -2,10 +2,14 @@
     max-width: 550px;
     width: 100%;
 
+    margin-top: 20px;
     background-color: white;
     padding: 30px 60px;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+    opacity: 0.9;
+    z-index: 10;
 }
 
 h2 {
