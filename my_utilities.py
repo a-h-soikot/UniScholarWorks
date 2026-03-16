@@ -144,3 +144,30 @@ def send_welcome_email(recipient_email: str, name: str) -> None:
         server.starttls(context=context)
         server.login(smtp_username, smtp_password)
         server.send_message(message)
+
+
+# AI-Powered Summarization using Gemini
+from google import genai
+
+def generate_pdf_summary(file_name: str) -> str:
+    """
+    Uploads a PDF natively and generates a summary using the modern Gemini SDK.
+    """
+    # 1. Initialize the modern Client
+    client = genai.Client(api_key=os.environ.get('GEMINI_API_KEY'))
+
+    file_path = os.path.join(upload_folder, file_name)
+    
+    # 2. Upload the file to Gemini's File API 
+    uploaded_file = client.files.upload(file=file_path)
+
+    # 3. Generate Summary using the file reference
+    response = client.models.generate_content(
+        model='gemini-2.5-flash',
+        contents=[
+            uploaded_file,
+            "Please provide a concise summary (200-300 words) of this thesis/research/project report."
+        ]
+    )
+    
+    return response.text

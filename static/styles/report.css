@@ -14,6 +14,13 @@
     width: 100%;
 }
 
+.ai-summary-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 1100px;
+    width: 100%;
+}
+
 .div-title {
     display: flex;
     flex-direction: row;
@@ -84,6 +91,11 @@
     cursor: not-allowed;
 }
 
+.download-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
 .div-right-section {
     padding-left: 20px;
     padding-top: 15px;
@@ -127,4 +139,50 @@
 .not-available {
     color: gray;
     font-style: italic;
+}
+
+.generate-summary-btn {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    background-color: #20bdcb;
+    width: 210px;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-top: 15px;
+    cursor: pointer;
+
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.generate-summary-btn:hover {
+    background-color: #1da7b8;
+}
+
+.summary-container {
+    display: none;
+    margin-top: 10px; 
+    padding: 15px; 
+    background-color: #f5f5f5; 
+    border-radius: 6px;
+}
+
+.summary-text {
+    font-size: 16px;
+    text-align: justify;
+    line-height: 1.6;
+    color: #000000;
+}
+
+.summary-error {
+    display: none; 
+    color: #d32f2f; 
+    font-size: 14px;
 }

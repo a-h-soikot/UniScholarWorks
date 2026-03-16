@@ -236,6 +236,43 @@ def report(report_id):
     return render_template("report.html", report=report)
 
 
+# Generate AI-powered summary for a PDF report.
+@app.route("/generate_summary", methods=["POST"])
+def generate_summary():
+    
+    if "user_id" not in session:
+        return jsonify(success=False, message="User not authenticated"), 401
+    
+    payload = request.get_json(silent=True) or {}
+    report_id = payload.get('report_id')
+    
+    if not report_id:
+        return jsonify(success=False, message="Report ID is required"), 400
+    
+    try:
+        # Get report to verify PDF exists and is allowed
+        report = db_queries.get_report_by_id(report_id)
+        if not report:
+            return jsonify(success=False, message="Report not found"), 404
+        
+        if not report.is_pdf_allowed() or not report.pdf_exists():
+            return jsonify(success=False, message="PDF is not available for this report"), 403
+        
+        # Generate summary using Gemini
+        file_id = report.get_file_id()
+        summary = my_utilities.generate_pdf_summary(file_id)
+        
+        return jsonify(success=True, summary=summary)
+    
+    except FileNotFoundError as e:
+        return jsonify(success=False, message="PDF file not found"), 404
+    except ValueError as e:
+        return jsonify(success=False, message=str(e)), 400
+    except Exception as e:
+        app.logger.exception("Error generating summary")
+        return jsonify(success=False, message="Failed to generate summary. Please try again."), 500
+
+
 
 @app.route("/submit_report", methods=["GET", "POST"])
 def submit_report():
