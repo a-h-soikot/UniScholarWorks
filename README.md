@@ -47,3 +47,21 @@ UniScholarWorks is a full-stack web application built with the goal of streamlin
 - CSRF protection with session signing
 - Configurable session lifetimes
 - Live reload support for development
+
+
+## Project Structure
+
+```
+UniScholarWorks/
+├── static/               # Client-side assets
+│   ├── images/           # Logo & other images
+│   ├── scripts/          # JavaScript modules
+│   └── styles/           # CSS stylesheets
+├── templates/            # HTML templates
+├── venv/                 # Virtual environment
+├── .gitignore            # Git ignored files
+├── app.py                # Flask application & route handlers
+├── database_queries.py   # Database operations & queries
+├── my_classes.py         # Data models (User, Report classes)
+└── my_utilities.py       # Utility functions (PDF watermarking, email, AI summary)
+```
