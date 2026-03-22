@@ -2,6 +2,12 @@
 
 UniScholarWorks is a full-stack web application built with the goal of streamlining the submission, tracking, review, and reading process of academic reports within a university environment. The platform supports dual-user roles (students and teachers) with role-based features, secure authentication, and document management.
 
+---
+
+## 🎬 Demo
+[https://github.com/user-attachments/assets/e11c42c2-1c41-4289-820e-35f175784237](https://github.com/user-attachments/assets/fef38a51-75a8-4e2d-843c-55102585dae2)
+
+---
 
 ## Key Features
 
